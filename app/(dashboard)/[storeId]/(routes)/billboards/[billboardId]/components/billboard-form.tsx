@@ -26,10 +26,6 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 import * as z from 'zod';
 
-interface BillboardFormProps {
-  initialData: Billboard | null;
-}
-
 const formSchema = z.object({
   label: z.string().min(1),
   imageUrl: z.string().min(1),
@@ -37,15 +33,18 @@ const formSchema = z.object({
 
 type BillboardFormValues = z.infer<typeof formSchema>;
 
+interface BillboardFormProps {
+  initialData: Billboard | null;
+}
+
 const BillboardForm: React.FC<BillboardFormProps> = ({ initialData }) => {
   const params = useParams();
   const router = useRouter();
-  const origin = useOrigin();
 
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const title = initialData ? 'Edit billboard' : 'Create billboard';
+  const title = initialData ? 'Edit bill board' : 'Create billboard';
   const description = initialData ? 'Edit a billboard' : 'Add a billboard';
   const toastMessage = initialData
     ? 'Billboard updated.'
