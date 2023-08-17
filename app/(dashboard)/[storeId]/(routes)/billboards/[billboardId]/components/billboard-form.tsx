@@ -15,7 +15,7 @@ import ImageUpload from '@/components/ui/image-upload';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Billboard, Store } from '@prisma/client';
+import { Billboard } from '@prisma/client';
 import axios from 'axios';
 import { Trash } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
@@ -47,7 +47,7 @@ const BillboardForm: React.FC<BillboardFormProps> = ({ initialData }) => {
   const toastMessage = initialData
     ? 'Billboard updated.'
     : 'Billboard created.';
-  const action = initialData ? 'Save changes.' : 'Create';
+  const action = initialData ? 'Save changes' : 'Create';
 
   const form = useForm<BillboardFormValues>({
     resolver: zodResolver(formSchema),
@@ -82,7 +82,7 @@ const BillboardForm: React.FC<BillboardFormProps> = ({ initialData }) => {
         `/api/stores/${params.storeId}/billboards/${params.billboardId}`
       );
       router.refresh();
-      router.push('/');
+      router.push(`/${params.storeId}/billboards`);
       toast.success('Billboard deleted.');
     } catch (error) {
       toast.error(
@@ -163,7 +163,6 @@ const BillboardForm: React.FC<BillboardFormProps> = ({ initialData }) => {
           </Button>
         </form>
       </Form>
-      <Separator />
     </>
   );
 };
