@@ -1,6 +1,6 @@
 'use client';
 
-import { BillboardColumn } from './columns';
+import { CategoryColumn } from './columns';
 import { AlertModal } from '@/components/modals/alert-modal';
 import { Button } from '@/components/ui/button';
 import {
@@ -17,7 +17,7 @@ import { useState } from 'react';
 import { toast } from 'react-hot-toast';
 
 interface CellActionProps {
-  data: BillboardColumn;
+  data: CategoryColumn;
 }
 
 const CellAction: React.FC<CellActionProps> = ({ data }) => {
@@ -28,17 +28,18 @@ const CellAction: React.FC<CellActionProps> = ({ data }) => {
 
   const onCopy = (id: string) => {
     navigator.clipboard.writeText(id);
-    toast.success('Billboard Id copied to the clipboard.');
+    toast.success('Category Id copied to the clipboard.');
   };
+
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/${params.storeId}/billboards/${data.id}`);
+      await axios.delete(`/api/${params.storeId}/categories/${data.id}`);
       router.refresh();
-      toast.success('Billboard deleted.');
+      toast.success('Category deleted.');
     } catch (error) {
       toast.error(
-        'Make sure  you removed all categories using this billboard first.'
+        'Make sure  you removed all products using this categories first.'
       );
     } finally {
       setLoading(false);
@@ -67,7 +68,7 @@ const CellAction: React.FC<CellActionProps> = ({ data }) => {
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() =>
-              router.push(`/${params.storeId}/billboards/${data.id}`)
+              router.push(`/${params.storeId}/categories/${data.id}`)
             }
           >
             <Edit className="mr-2 h-4 w-4" /> Update
