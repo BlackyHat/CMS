@@ -1,4 +1,4 @@
-import SizesClient from './components/client.';
+import SizesClient from './components/client';
 import { SizeColumn } from './components/columns';
 import prismadb from '@/lib/prismadb';
 import { format } from 'date-fns';
