@@ -159,6 +159,16 @@ const ProductForm: React.FC<ProductFormProps> = ({
                 <FormControl>
                   <ImageUpload
                     disabled={loading}
+                    onTop={(url) => {
+                      const idx = field.value.findIndex(
+                        (element) => element.url === url
+                      );
+                      if (idx !== -1) {
+                        const elementToMove = field.value.splice(idx, 1)[0];
+                        field.value.unshift(elementToMove);
+                        field.onChange([...field.value]);
+                      }
+                    }}
                     onChange={(url) =>
                       field.onChange([...field.value, { url }])
                     }
