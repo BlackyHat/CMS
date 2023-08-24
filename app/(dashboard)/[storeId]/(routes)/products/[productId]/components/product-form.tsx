@@ -122,7 +122,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
       setOpen(false);
     }
   };
-
+  console.log(initialData);
   return (
     <>
       <AlertModal

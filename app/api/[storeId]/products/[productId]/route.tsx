@@ -98,7 +98,6 @@ export async function PATCH(
         },
       },
     });
-
     const product = await prismadb.product.update({
       where: {
         id: params.productId,
