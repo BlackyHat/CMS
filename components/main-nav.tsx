@@ -28,9 +28,19 @@ const MainNav = ({
       active: pathname === `/${params.storeId}/categories`,
     },
     {
-      href: `/${params.storeId}/sizes`,
-      label: 'Sizes',
-      active: pathname === `/${params.storeId}/sizes`,
+      href: `/${params.storeId}/bodyTypes`,
+      label: 'Body Types',
+      active: pathname === `/${params.storeId}/bodyTypes`,
+    },
+    {
+      href: `/${params.storeId}/makes`,
+      label: 'Makes',
+      active: pathname === `/${params.storeId}/makes`,
+    },
+    {
+      href: `/${params.storeId}/models`,
+      label: 'Models',
+      active: pathname === `/${params.storeId}/models`,
     },
     {
       href: `/${params.storeId}/colors`,
@@ -41,11 +51,6 @@ const MainNav = ({
       href: `/${params.storeId}/products`,
       label: 'Products',
       active: pathname === `/${params.storeId}/products`,
-    },
-    {
-      href: `/${params.storeId}/orders`,
-      label: 'Orders',
-      active: pathname === `/${params.storeId}/orders`,
     },
     {
       href: `/${params.storeId}/settings`,
