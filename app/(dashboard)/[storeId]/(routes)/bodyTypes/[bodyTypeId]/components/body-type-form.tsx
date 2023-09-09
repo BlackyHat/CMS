@@ -11,10 +11,11 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import ImageUpload from '@/components/ui/image-upload';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Size } from '@prisma/client';
+import { BodyType, Category } from '@prisma/client';
 import axios from 'axios';
 import { Trash } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
@@ -24,46 +25,48 @@ import { toast } from 'react-hot-toast';
 import * as z from 'zod';
 
 const formSchema = z.object({
-  name: z.string().min(1),
-  value: z.string().min(1),
+  label: z.string().min(3),
+  imageUrl: z.string().min(3),
 });
 
-type SizeFormValues = z.infer<typeof formSchema>;
+type BodyTypeFormValues = z.infer<typeof formSchema>;
 
-interface SizeFormProps {
-  initialData: Size | null;
+interface BodyTypeFormProps {
+  initialData: BodyType | null;
 }
 
-const SizeForm: React.FC<SizeFormProps> = ({ initialData }) => {
+const BodyTypeForm: React.FC<BodyTypeFormProps> = ({ initialData }) => {
   const params = useParams();
   const router = useRouter();
 
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const title = initialData ? 'Edit sizes' : 'Create sizes';
-  const description = initialData ? 'Edit a sizes' : 'Add a sizes';
-  const toastMessage = initialData ? 'Sizes updated.' : 'Sizes created.';
+  const title = initialData ? 'Edit body type' : 'Create body type';
+  const description = initialData ? 'Edit a body type' : 'Add a body type';
+  const toastMessage = initialData
+    ? 'Body type updated.'
+    : 'body type created.';
   const action = initialData ? 'Save changes' : 'Create';
 
-  const form = useForm<SizeFormValues>({
+  const form = useForm<BodyTypeFormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: initialData || { name: '', value: '' },
+    defaultValues: initialData || { label: '', imageUrl: '' },
   });
 
-  const onSubmit = async (data: SizeFormValues) => {
+  const onSubmit = async (data: BodyTypeFormValues) => {
     try {
       setLoading(true);
       if (initialData) {
         await axios.patch(
-          `/api/${params.storeId}/sizes/${params.sizeId}`,
+          `/api/${params.storeId}/bodyTypes/${params.bodyTypeId}`,
           data
         );
       } else {
-        await axios.post(`/api/${params.storeId}/sizes`, data);
+        await axios.post(`/api/${params.storeId}/bodyTypes`, data);
       }
       router.refresh();
-      router.push(`/${params.storeId}/sizes`);
+      router.push(`/${params.storeId}/bodyTypes`);
       toast.success(toastMessage);
     } catch (error) {
       toast.error('Something went wrong.');
@@ -76,13 +79,15 @@ const SizeForm: React.FC<SizeFormProps> = ({ initialData }) => {
     try {
       setLoading(true);
       await axios.delete(
-        `/api/stores/${params.storeId}/sizes/${params.sizeId}`
+        `/api/${params.storeId}/bodyTypes/${params.bodyTypeId}`
       );
       router.refresh();
-      router.push(`/${params.storeId}/sizes`);
-      toast.success('Size deleted.');
+      router.push(`/${params.storeId}/bodyTypes`);
+      toast.success('Body type deleted.');
     } catch (error) {
-      toast.error('Make sure  you removed all products using this size first.');
+      toast.error(
+        'Make sure  you removed all products using this Body type first.'
+      );
     } finally {
       setLoading(false);
       setOpen(false);
@@ -116,34 +121,35 @@ const SizeForm: React.FC<SizeFormProps> = ({ initialData }) => {
           onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-8 w-full"
         >
+           <FormField
+            control={form.control}
+            name="imageUrl"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Body Type URL</FormLabel>
+                <FormControl>
+                  <ImageUpload
+                    disabled={loading}
+                    onChange={(url) => field.onChange(url)}
+                    onRemove={() => field.onChange('')}
+                    value={field.value ? [field.value] : []}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <div className="grid grid-cols-3 gap-8">
             <FormField
               control={form.control}
-              name="name"
+              name="label"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>Label</FormLabel>
                   <FormControl>
                     <Input
                       disabled={loading}
-                      placeholder="Size name"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="value"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Value</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={loading}
-                      placeholder="Size value"
+                      placeholder="Body Type label"
                       {...field}
                     />
                   </FormControl>
@@ -161,4 +167,4 @@ const SizeForm: React.FC<SizeFormProps> = ({ initialData }) => {
   );
 };
 
-export default SizeForm;
+export default BodyTypeForm;

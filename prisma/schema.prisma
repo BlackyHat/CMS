@@ -17,14 +17,14 @@ model Store {
   userId String
   billboards Billboard[] @relation("StoreToBillboard")
   categories Category[] @relation("StoreToCategory")
-  sizes Size[] @relation("StoreToSize")
+  bodyTypes BodyType[] @relation("StoreToBodyType")
+  makes Make[] @relation("StoreToMake")
+  // models Model[] @relation("StoreToModel")
   colors Color[] @relation("StoreToColor")
   products Product[] @relation("StoreToProduct")
-  orders Order[] @relation("StoreToOrder")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
-
 
 model Billboard {
   id String @id @default(uuid())
@@ -38,14 +38,15 @@ model Billboard {
 
   @@index([storeId])
 }
+
 model Category {
   id String @id @default(uuid())
   storeId String
   store Store @relation("StoreToCategory", fields: [storeId], references: [id])
   billboardId String
   billboard Billboard @relation(fields: [billboardId], references: [id])
-  product Product[] @relation("CategoryToProduct")
-  name String
+  products Product[] @relation("CategoryToProduct")
+  name String @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -53,31 +54,59 @@ model Category {
   @@index([billboardId])
 }
 
-model Size {
+model BodyType {
   id String @id @default(uuid())
   storeId String
-  store Store @relation("StoreToSize", fields: [storeId], references: [id])
-  name String
-  value String
+  store Store @relation("StoreToBodyType", fields: [storeId], references: [id])
+  products Product[] @relation("BodyTypeToProduct")
+  label String @unique
+  imageUrl String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([storeId])
+}
+model Make {
+  id String @id @default(uuid())
+  storeId String
+  store Store @relation("StoreToMake", fields: [storeId], references: [id])
+  label String @unique
+  models Model[] @relation("MakeToModel")
   products Product[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([storeId])
+
+}
+model Model {
+  id String @id @default(uuid())
+  // storeId String
+  // store Store @relation("StoreToModel", fields: [storeId], references: [id])
+  name String @unique
+  products Product[]
+  makeId String
+  make Make @relation("MakeToModel",fields: [makeId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([makeId])
+  // @@index([storeId])
 
 }
 model Color {
   id String @id @default(uuid())
   storeId String
   store Store @relation("StoreToColor", fields: [storeId], references: [id])
-  name String
-  value String
+  name String @unique
+  value String @unique
   products Product[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([storeId])
 }
+
 
 model Product {
   id String @id @default(uuid())
@@ -86,23 +115,34 @@ model Product {
   categoryId String
   category Category @relation("CategoryToProduct", fields: [categoryId], references: [id])
   name String
-  price Decimal
+  price Int
+  mileage Int
   isFeatured Boolean @default(false)
   isArchived Boolean @default(false)
-  sizeId String
-  size Size @relation(fields: [sizeId], references: [id])
+  bodyTypeId String
+  bodyType BodyType @relation("BodyTypeToProduct", fields: [bodyTypeId], references: [id])
+  makeId String
+  make Make @relation(fields: [makeId], references: [id])
+  modelId String
+  model Model @relation(fields: [modelId], references: [id])
   colorId String
   color Color @relation(fields: [colorId], references: [id])
+  year Int
+  fuel FuelType
+  gearbox GearboxType
+  typeOfDrive TypeOfDriveOption
   images Image[]
-  orderItems OrderItem[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([storeId])
   @@index([categoryId])
-  @@index([sizeId])
+  @@index([bodyTypeId])
+  @@index([makeId])
+  @@index([modelId])
   @@index([colorId])
 }
+
 
 model Image {
   id String @id @default(uuid())
@@ -115,29 +155,21 @@ model Image {
   @@index([productId])
 }
 
-model Order {
-  id String @id @default(uuid())
-  storeId String
-  store Store @relation("StoreToOrder", fields: [storeId], references: [id])
-  orderItems OrderItem[]
-  isPaid  Boolean @default(false)
-  phone String @default("")
-  address String @default("")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([storeId])
+enum FuelType {
+  DIESEL
+  PETROL
+  LPG
+  LPG_PETROL
+  GYBRID
+  ELECTRIC
+  HYDROGEN
+}
+enum GearboxType {
+  AUTOMATIC
+  MANUAL
+}
+enum TypeOfDriveOption {
+  ALL_WD
+  AWD
 }
 
-model OrderItem {
-  id String @id @default(uuid())
-  orderId String
-  order Order @relation(fields: [orderId], references: [id])
-  productId String
-  product Product @relation(fields: [productId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([orderId])
-  @@index([productId])
-}
