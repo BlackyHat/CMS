@@ -11,17 +11,11 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import ImageUpload from '@/components/ui/image-upload';
 import { Input } from '@/components/ui/input';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-} from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { BodyType, Category } from '@prisma/client';
-import { SelectValue } from '@radix-ui/react-select';
 import axios from 'axios';
 import { Trash } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
@@ -31,21 +25,17 @@ import { toast } from 'react-hot-toast';
 import * as z from 'zod';
 
 const formSchema = z.object({
-  name: z.string().min(1),
-  categoryId: z.string().min(1),
+  label: z.string().min(3),
+  imageUrl: z.string().min(3),
 });
 
 type BodyTypeFormValues = z.infer<typeof formSchema>;
 
 interface BodyTypeFormProps {
   initialData: BodyType | null;
-  categories: Category[];
 }
 
-const BodyTypeForm: React.FC<BodyTypeFormProps> = ({
-  initialData,
-  categories,
-}) => {
+const BodyTypeForm: React.FC<BodyTypeFormProps> = ({ initialData }) => {
   const params = useParams();
   const router = useRouter();
 
@@ -61,7 +51,7 @@ const BodyTypeForm: React.FC<BodyTypeFormProps> = ({
 
   const form = useForm<BodyTypeFormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: initialData || { name: '', categoryId: '' },
+    defaultValues: initialData || { label: '', imageUrl: '' },
   });
 
   const onSubmit = async (data: BodyTypeFormValues) => {
@@ -69,14 +59,14 @@ const BodyTypeForm: React.FC<BodyTypeFormProps> = ({
       setLoading(true);
       if (initialData) {
         await axios.patch(
-          `/api/${params.storeId}/categories/${params.categoryId}`,
+          `/api/${params.storeId}/bodyTypes/${params.bodyTypeId}`,
           data
         );
       } else {
-        await axios.post(`/api/${params.storeId}/categories`, data);
+        await axios.post(`/api/${params.storeId}/bodyTypes`, data);
       }
       router.refresh();
-      router.push(`/${params.storeId}/categories`);
+      router.push(`/${params.storeId}/bodyTypes`);
       toast.success(toastMessage);
     } catch (error) {
       toast.error('Something went wrong.');
@@ -89,14 +79,14 @@ const BodyTypeForm: React.FC<BodyTypeFormProps> = ({
     try {
       setLoading(true);
       await axios.delete(
-        `/api/${params.storeId}/categories/${params.categoryId}`
+        `/api/${params.storeId}/bodyTypes/${params.bodyTypeId}`
       );
       router.refresh();
-      router.push(`/${params.storeId}/categories`);
-      toast.success('Category deleted.');
+      router.push(`/${params.storeId}/bodyTypes`);
+      toast.success('Body type deleted.');
     } catch (error) {
       toast.error(
-        'Make sure  you removed all products using this category first.'
+        'Make sure  you removed all products using this Body type first.'
       );
     } finally {
       setLoading(false);
@@ -131,52 +121,38 @@ const BodyTypeForm: React.FC<BodyTypeFormProps> = ({
           onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-8 w-full"
         >
+           <FormField
+            control={form.control}
+            name="imageUrl"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Body Type URL</FormLabel>
+                <FormControl>
+                  <ImageUpload
+                    disabled={loading}
+                    onChange={(url) => field.onChange(url)}
+                    onRemove={() => field.onChange('')}
+                    value={field.value ? [field.value] : []}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <div className="grid grid-cols-3 gap-8">
             <FormField
               control={form.control}
-              name="name"
+              name="label"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>Label</FormLabel>
                   <FormControl>
                     <Input
                       disabled={loading}
-                      placeholder="Body Type name"
+                      placeholder="Body Type label"
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="categoryId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Category</FormLabel>
-                  <Select
-                    disabled={loading}
-                    onValueChange={field.onChange}
-                    value={field.value}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue
-                          defaultValue={field.value}
-                          placeholder="Select a billboard"
-                        />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {categories.map(({ name, id }) => (
-                        <SelectItem key={id} value={id}>
-                          {name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
                   <FormMessage />
                 </FormItem>
               )}

@@ -3,21 +3,16 @@
 import CellAction from './cell-action';
 import { ColumnDef } from '@tanstack/react-table';
 
-export type SizeColumn = {
+export type MakeColumn = {
   id: string;
-  name: string;
-  value: string;
+  label: string;
   createdAt: string;
 };
 
-export const columns: ColumnDef<SizeColumn>[] = [
+export const columns: ColumnDef<MakeColumn>[] = [
   {
-    accessorKey: 'name',
-    header: 'Name',
-  },
-  {
-    accessorKey: 'value',
-    header: 'Value',
+    accessorKey: 'label',
+    header: 'Label',
   },
   {
     accessorKey: 'createdAt',

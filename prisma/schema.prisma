@@ -19,7 +19,7 @@ model Store {
   categories Category[] @relation("StoreToCategory")
   bodyTypes BodyType[] @relation("StoreToBodyType")
   makes Make[] @relation("StoreToMake")
-  models Model[] @relation("StoreToModel")
+  // models Model[] @relation("StoreToModel")
   colors Color[] @relation("StoreToColor")
   products Product[] @relation("StoreToProduct")
   createdAt DateTime @default(now())
@@ -59,7 +59,8 @@ model BodyType {
   storeId String
   store Store @relation("StoreToBodyType", fields: [storeId], references: [id])
   products Product[] @relation("BodyTypeToProduct")
-  name String @unique
+  label String @unique
+  imageUrl String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -69,7 +70,7 @@ model Make {
   id String @id @default(uuid())
   storeId String
   store Store @relation("StoreToMake", fields: [storeId], references: [id])
-  name String @unique
+  label String @unique
   models Model[] @relation("MakeToModel")
   products Product[]
   createdAt DateTime @default(now())
@@ -80,8 +81,8 @@ model Make {
 }
 model Model {
   id String @id @default(uuid())
-  storeId String
-  store Store @relation("StoreToModel", fields: [storeId], references: [id])
+  // storeId String
+  // store Store @relation("StoreToModel", fields: [storeId], references: [id])
   name String @unique
   products Product[]
   makeId String
@@ -90,7 +91,7 @@ model Model {
   updatedAt DateTime @updatedAt
 
   @@index([makeId])
-  @@index([storeId])
+  // @@index([storeId])
 
 }
 model Color {

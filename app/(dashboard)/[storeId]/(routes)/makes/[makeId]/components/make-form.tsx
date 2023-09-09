@@ -14,7 +14,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Size } from '@prisma/client';
+import { Make } from '@prisma/client';
 import axios from 'axios';
 import { Trash } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
@@ -24,46 +24,45 @@ import { toast } from 'react-hot-toast';
 import * as z from 'zod';
 
 const formSchema = z.object({
-  name: z.string().min(1),
-  value: z.string().min(1),
+  label: z.string().min(1),
 });
 
-type SizeFormValues = z.infer<typeof formSchema>;
+type MakeFormValues = z.infer<typeof formSchema>;
 
-interface SizeFormProps {
-  initialData: Size | null;
+interface MakeFormProps {
+  initialData: Make | null;
 }
 
-const SizeForm: React.FC<SizeFormProps> = ({ initialData }) => {
+const MakeForm: React.FC<MakeFormProps> = ({ initialData }) => {
   const params = useParams();
   const router = useRouter();
 
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const title = initialData ? 'Edit sizes' : 'Create sizes';
-  const description = initialData ? 'Edit a sizes' : 'Add a sizes';
-  const toastMessage = initialData ? 'Sizes updated.' : 'Sizes created.';
+  const title = initialData ? 'Edit makes' : 'Create makes';
+  const description = initialData ? 'Edit a makes' : 'Add a makes';
+  const toastMessage = initialData ? 'Makes updated.' : 'Makes created.';
   const action = initialData ? 'Save changes' : 'Create';
 
-  const form = useForm<SizeFormValues>({
+  const form = useForm<MakeFormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: initialData || { name: '', value: '' },
+    defaultValues: initialData || { label: '' },
   });
 
-  const onSubmit = async (data: SizeFormValues) => {
+  const onSubmit = async (data: MakeFormValues) => {
     try {
       setLoading(true);
       if (initialData) {
         await axios.patch(
-          `/api/${params.storeId}/sizes/${params.sizeId}`,
+          `/api/${params.storeId}/makes/${params.makeId}`,
           data
         );
       } else {
-        await axios.post(`/api/${params.storeId}/sizes`, data);
+        await axios.post(`/api/${params.storeId}/makes`, data);
       }
       router.refresh();
-      router.push(`/${params.storeId}/sizes`);
+      router.push(`/${params.storeId}/makes`);
       toast.success(toastMessage);
     } catch (error) {
       toast.error('Something went wrong.');
@@ -76,13 +75,13 @@ const SizeForm: React.FC<SizeFormProps> = ({ initialData }) => {
     try {
       setLoading(true);
       await axios.delete(
-        `/api/stores/${params.storeId}/sizes/${params.sizeId}`
+        `/api/stores/${params.storeId}/makes/${params.makeId}`
       );
       router.refresh();
-      router.push(`/${params.storeId}/sizes`);
-      toast.success('Size deleted.');
+      router.push(`/${params.storeId}/makes`);
+      toast.success('Make deleted.');
     } catch (error) {
-      toast.error('Make sure  you removed all products using this size first.');
+      toast.error('Make sure you removed all products using this Make first.');
     } finally {
       setLoading(false);
       setOpen(false);
@@ -119,31 +118,14 @@ const SizeForm: React.FC<SizeFormProps> = ({ initialData }) => {
           <div className="grid grid-cols-3 gap-8">
             <FormField
               control={form.control}
-              name="name"
+              name="label"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>Label</FormLabel>
                   <FormControl>
                     <Input
                       disabled={loading}
-                      placeholder="Size name"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="value"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Value</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={loading}
-                      placeholder="Size value"
+                      placeholder="Make label"
                       {...field}
                     />
                   </FormControl>
@@ -161,4 +143,4 @@ const SizeForm: React.FC<SizeFormProps> = ({ initialData }) => {
   );
 };
 
-export default SizeForm;
+export default MakeForm;

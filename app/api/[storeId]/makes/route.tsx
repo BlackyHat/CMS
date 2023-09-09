@@ -10,16 +10,13 @@ export async function POST(
     const { userId } = auth();
     const body = await req.json();
 
-    const { name, value } = body;
+    const { label } = body;
 
     if (!userId) {
       return new NextResponse('Unauthenticated', { status: 401 });
     }
-    if (!name) {
-      return new NextResponse('Name is required', { status: 400 });
-    }
-    if (!value) {
-      return new NextResponse('Value is required', { status: 400 });
+    if (!label) {
+      return new NextResponse('Label is required', { status: 400 });
     }
     if (!params.storeId) {
       return new NextResponse('Store ID is required', { status: 400 });
@@ -34,15 +31,14 @@ export async function POST(
     }
     const make = await prismadb.make.create({
       data: {
-        name,
-        value,
+        label,
         storeId: params.storeId,
       },
     });
 
     return NextResponse.json(make);
   } catch (error) {
-    console.log('[MAKES_POST]', error);
+    console.log('[MAKE_POST]', error);
     return new NextResponse('Internal error', { status: 500 });
   }
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import { CategoryColumn } from './columns';
+import { BodyTypeColumn } from './columns';
 import { AlertModal } from '@/components/modals/alert-modal';
 import { Button } from '@/components/ui/button';
 import {
@@ -17,7 +17,7 @@ import { useState } from 'react';
 import { toast } from 'react-hot-toast';
 
 interface CellActionProps {
-  data: CategoryColumn;
+  data: BodyTypeColumn;
 }
 
 const CellAction: React.FC<CellActionProps> = ({ data }) => {
@@ -28,18 +28,18 @@ const CellAction: React.FC<CellActionProps> = ({ data }) => {
 
   const onCopy = (id: string) => {
     navigator.clipboard.writeText(id);
-    toast.success('Category Id copied to the clipboard.');
+    toast.success('Body Type Id copied to the clipboard.');
   };
 
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/${params.storeId}/categories/${data.id}`);
+      await axios.delete(`/api/${params.storeId}/bodyTypes/${data.id}`);
       router.refresh();
-      toast.success('Category deleted.');
+      toast.success('Body Type deleted.');
     } catch (error) {
       toast.error(
-        'Make sure  you removed all products using this categories first.'
+        'Make sure  you removed all products using this Body Types first.'
       );
     } finally {
       setLoading(false);
@@ -68,7 +68,7 @@ const CellAction: React.FC<CellActionProps> = ({ data }) => {
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() =>
-              router.push(`/${params.storeId}/categories/${data.id}`)
+              router.push(`/${params.storeId}/bodyTypes/${data.id}`)
             }
           >
             <Edit className="mr-2 h-4 w-4" /> Update

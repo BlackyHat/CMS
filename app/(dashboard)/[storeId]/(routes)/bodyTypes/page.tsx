@@ -6,15 +6,14 @@ import { format } from 'date-fns';
 const BodyTypesPage = async ({ params }: { params: { storeId: string } }) => {
   const bodyTypes = await prismadb.bodyType.findMany({
     where: { storeId: params.storeId },
-    include: { category: true },
     orderBy: { createdAt: 'desc' },
   });
 
   const formattedBodyTypes: BodyTypeColumn[] = bodyTypes.map(
-    ({ id, name, category, createdAt }) => ({
+    ({ id, label, imageUrl, createdAt }) => ({
       id,
-      name,
-      categoryName: category.name,
+      label,
+      imageUrl,
       createdAt: format(createdAt, 'MMMM do, yyyy'),
     })
   );

@@ -1,6 +1,6 @@
 'use client';
 
-import { SizeColumn, columns } from './columns';
+import { MakeColumn, columns } from './columns';
 import Heading from '@/components/heading';
 import ApiList from '@/components/ui/api-list';
 import { Button } from '@/components/ui/button';
@@ -9,11 +9,11 @@ import { Separator } from '@/components/ui/separator';
 import { Plus } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
 
-interface SizesClientProps {
-  data: SizeColumn[];
+interface MakesClientProps {
+  data: MakeColumn[];
 }
 
-const SizesClient: React.FC<SizesClientProps> = ({ data }) => {
+const MakesClient: React.FC<MakesClientProps> = ({ data }) => {
   const router = useRouter();
   const params = useParams();
 
@@ -21,21 +21,21 @@ const SizesClient: React.FC<SizesClientProps> = ({ data }) => {
     <>
       <div className="flex items-center justify-between">
         <Heading
-          title={`Sizes (${data.length})`}
-          description="Manage sizes for your store"
+          title={`Makes (${data.length})`}
+          description="Manage Makes for your store"
         />
-        <Button onClick={() => router.push(`/${params.storeId}/sizes/new`)}>
+        <Button onClick={() => router.push(`/${params.storeId}/makes/new`)}>
           <Plus className="mr-2 h-4 w-4" />
           Add new
         </Button>
       </div>
       <Separator />
       <DataTable columns={columns} data={data} searchKey="name" />
-      <Heading title="API" description="API calls for Sizes" />
+      <Heading title="API" description="API calls for Makes" />
       <Separator />
-      <ApiList entityName="sizes" entityIdName="sizeId" />
+      <ApiList entityName="makes" entityIdName="makeId" />
     </>
   );
 };
 
-export default SizesClient;
+export default MakesClient;
