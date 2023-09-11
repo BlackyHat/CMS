@@ -4,6 +4,13 @@ import Heading from '@/components/heading';
 import { AlertModal } from '@/components/modals/alert-modal';
 import { Button } from '@/components/ui/button';
 import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from '@/components/ui/command';
+import {
   Form,
   FormControl,
   FormField,
@@ -13,17 +20,17 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-} from '@/components/ui/select';
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
 import { Separator } from '@/components/ui/separator';
+import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Make, Model } from '@prisma/client';
-import { SelectValue } from '@radix-ui/react-select';
 import axios from 'axios';
 import { Trash } from 'lucide-react';
+import { Check, ChevronsUpDown } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -47,6 +54,8 @@ const ModelForm: React.FC<ModelFormProps> = ({ initialData, makes }) => {
   const router = useRouter();
 
   const [open, setOpen] = useState(false);
+  const [openPopover, setOpenPopover] = useState(false);
+
   const [loading, setLoading] = useState(false);
 
   const title = initialData ? 'Edit model' : 'Create model';
@@ -146,30 +155,59 @@ const ModelForm: React.FC<ModelFormProps> = ({ initialData, makes }) => {
               control={form.control}
               name="makeId"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="flex flex-col justify-end">
                   <FormLabel>Make</FormLabel>
-                  <Select
-                    disabled={loading}
-                    onValueChange={field.onChange}
-                    value={field.value}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue
-                          defaultValue={field.value}
-                          placeholder="Select a make"
-                        />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {makes.map(({ label, id }) => (
-                        <SelectItem key={id} value={id}>
-                          {label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <Popover open={openPopover} onOpenChange={setOpenPopover}>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          aria-expanded={open}
+                          className={cn(
+                            'justify-between',
+                            !field.value && 'text-muted-foreground'
+                          )}
+                        >
+                          {field.value
+                            ? makes.find((make) => make.id === field.value)
+                                ?.label
+                            : 'Select make'}
+                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="lg:w-[380px] sm:w-[180px] p-0">
+                      <Command>
+                        <CommandInput placeholder="Search make..." />
+                        <CommandEmpty>No make found.</CommandEmpty>
+                        <CommandGroup>
+                          {makes.map(({ label, id }) => (
+                            <CommandItem
+                              value={label}
+                              key={label}
+                              disabled={loading}
+                              onSelect={() => {
+                                form.setValue('makeId', id);
+                                setOpenPopover;
+                                false;
+                              }}
+                            >
+                              <Check
+                                className={cn(
+                                  'mr-2 h-4 w-4',
+                                  id === field.value
+                                    ? 'opacity-100'
+                                    : 'opacity-0'
+                                )}
+                              />
+                              {label}
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
                   <FormMessage />
                 </FormItem>
               )}
