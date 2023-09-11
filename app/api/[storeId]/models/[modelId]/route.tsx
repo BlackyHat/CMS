@@ -4,34 +4,34 @@ import { NextResponse } from 'next/server';
 
 export async function GET(
   req: Request,
-  { params }: { params: { makeId: string } }
+  { params }: { params: { modelId: string } }
 ) {
   try {
-    if (!params.makeId) {
-      return new NextResponse('Make id is required', { status: 400 });
+    if (!params.modelId) {
+      return new NextResponse('Model id is required', { status: 400 });
     }
-    const make = await prismadb.make.findUnique({
+    const model = await prismadb.model.findUnique({
       where: {
-        id: params.makeId,
+        id: params.modelId,
       },
     });
 
-    return NextResponse.json(make);
+    return NextResponse.json(model);
   } catch (error) {
-    console.log('[MAKE_GET]', error);
+    console.log('[MODEL_GET]', error);
     return new NextResponse('Internal error', { status: 500 });
   }
 }
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { storeId: string; makeId: string } }
+  { params }: { params: { storeId: string; modelId: string } }
 ) {
   try {
     const { userId } = auth();
     const body = await req.json();
 
-    const { label } = body;
+    const { label, makeId } = body;
 
     if (!userId) {
       return new NextResponse('Unauthenticated', { status: 401 });
@@ -39,8 +39,11 @@ export async function PATCH(
     if (!label) {
       return new NextResponse('Label is required', { status: 400 });
     }
-    if (!params.makeId) {
+    if (!makeId) {
       return new NextResponse('Make id is required', { status: 400 });
+    }
+    if (!params.modelId) {
+      return new NextResponse('Model id is required', { status: 400 });
     }
 
     const storeByUserId = await prismadb.store.findFirst({
@@ -50,25 +53,26 @@ export async function PATCH(
     if (!storeByUserId) {
       return new NextResponse('Unauthorized', { status: 403 });
     }
-    const make = await prismadb.make.updateMany({
+    const model = await prismadb.model.updateMany({
       where: {
-        id: params.makeId,
+        id: params.modelId,
       },
       data: {
         label,
+        makeId,
       },
     });
 
-    return NextResponse.json(make);
+    return NextResponse.json(model);
   } catch (error) {
-    console.log('[MAKE_PATCH]', error);
+    console.log('[MODEL_PATCH]', error);
     return new NextResponse('Internal error', { status: 500 });
   }
 }
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { storeId: string; makeId: string } }
+  { params }: { params: { storeId: string; modelId: string } }
 ) {
   try {
     const { userId } = auth();
@@ -76,8 +80,8 @@ export async function DELETE(
     if (!userId) {
       return new NextResponse('Unauthenticated', { status: 401 });
     }
-    if (!params.makeId) {
-      return new NextResponse('Make id is required', { status: 400 });
+    if (!params.modelId) {
+      return new NextResponse('Model id is required', { status: 400 });
     }
     const storeByUserId = await prismadb.store.findFirst({
       where: { id: params.storeId, userId },
@@ -86,15 +90,15 @@ export async function DELETE(
     if (!storeByUserId) {
       return new NextResponse('Unauthorized', { status: 403 });
     }
-    const make = await prismadb.make.deleteMany({
+    const model = await prismadb.model.deleteMany({
       where: {
-        id: params.makeId,
+        id: params.modelId,
       },
     });
 
-    return NextResponse.json(make);
+    return NextResponse.json(model);
   } catch (error) {
-    console.log('[MAKE_DELETE]', error);
+    console.log('[MODEL_DELETE]', error);
     return new NextResponse('Internal error', { status: 500 });
   }
 }

@@ -1,10 +1,10 @@
 import MakeForm from './components/make-form';
 import prismadb from '@/lib/prismadb';
 
-const MakesPage = async ({ params }: { params: { sizeId: string } }) => {
+const MakesPage = async ({ params }: { params: { makeId: string } }) => {
   const make = await prismadb.make.findUnique({
     where: {
-      id: params.sizeId,
+      id: params.makeId,
     },
   });
   return (

@@ -10,7 +10,7 @@ export async function POST(
     const { userId } = auth();
     const body = await req.json();
 
-    const { label } = body;
+    const { label, makeId } = body;
 
     if (!userId) {
       return new NextResponse('Unauthenticated', { status: 401 });
@@ -18,6 +18,10 @@ export async function POST(
     if (!label) {
       return new NextResponse('Label is required', { status: 400 });
     }
+    if (!makeId) {
+      return new NextResponse('Make id is required', { status: 400 });
+    }
+
     if (!params.storeId) {
       return new NextResponse('Store ID is required', { status: 400 });
     }
@@ -29,16 +33,16 @@ export async function POST(
     if (!storeByUserId) {
       return new NextResponse('Unauthorized', { status: 403 });
     }
-    const make = await prismadb.make.create({
+    const model = await prismadb.model.create({
       data: {
         label,
-        storeId: params.storeId,
+        makeId,
       },
     });
 
-    return NextResponse.json(make);
+    return NextResponse.json(model);
   } catch (error) {
-    console.log('[MAKE_POST]', error);
+    console.log('[MODEL_POST]', error);
     return new NextResponse('Internal error', { status: 500 });
   }
 }
@@ -51,15 +55,11 @@ export async function GET(
       return new NextResponse('Store ID is required', { status: 400 });
     }
 
-    const makes = await prismadb.make.findMany({
-      where: {
-        storeId: params.storeId,
-      },
-    });
+    const models = await prismadb.model.findMany();
 
-    return NextResponse.json(makes);
+    return NextResponse.json(models);
   } catch (error) {
-    console.log('[MAKES_GET]', error);
+    console.log('[MODELS_GET]', error);
     return new NextResponse('Internal error', { status: 500 });
   }
 }

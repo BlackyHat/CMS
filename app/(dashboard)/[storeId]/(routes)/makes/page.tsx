@@ -6,7 +6,7 @@ import { format } from 'date-fns';
 const MakesPage = async ({ params }: { params: { storeId: string } }) => {
   const makes = await prismadb.make.findMany({
     where: { storeId: params.storeId },
-    orderBy: { createdAt: 'desc' },
+    orderBy: { label: 'asc' },
   });
 
   const formattedMakes: MakeColumn[] = makes.map(

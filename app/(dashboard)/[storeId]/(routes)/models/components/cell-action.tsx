@@ -1,6 +1,6 @@
 'use client';
 
-import { MakeColumn } from './columns';
+import { ModelColumn } from './columns';
 import { AlertModal } from '@/components/modals/alert-modal';
 import { Button } from '@/components/ui/button';
 import {
@@ -17,7 +17,7 @@ import { useState } from 'react';
 import { toast } from 'react-hot-toast';
 
 interface CellActionProps {
-  data: MakeColumn;
+  data: ModelColumn;
 }
 
 const CellAction: React.FC<CellActionProps> = ({ data }) => {
@@ -28,16 +28,16 @@ const CellAction: React.FC<CellActionProps> = ({ data }) => {
 
   const onCopy = (id: string) => {
     navigator.clipboard.writeText(id);
-    toast.success('Make Id copied to the clipboard.');
+    toast.success('Model Id copied to the clipboard.');
   };
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/${params.storeId}/makes/${data.id}`);
+      await axios.delete(`/api/${params.storeId}/models/${data.id}`);
       router.refresh();
-      toast.success('Make deleted.');
+      toast.success('Model deleted.');
     } catch (error) {
-      toast.error('Make sure  you removed all products using this make first.');
+      toast.error('Make sure  you removed all makes using this model first.');
     } finally {
       setLoading(false);
       setOpen(false);
@@ -64,7 +64,7 @@ const CellAction: React.FC<CellActionProps> = ({ data }) => {
             <Copy className="mr-2 h-4 w-4" /> Copy Id
           </DropdownMenuItem>
           <DropdownMenuItem
-            onClick={() => router.push(`/${params.storeId}/makes/${data.id}`)}
+            onClick={() => router.push(`/${params.storeId}/models/${data.id}`)}
           >
             <Edit className="mr-2 h-4 w-4" /> Update
           </DropdownMenuItem>

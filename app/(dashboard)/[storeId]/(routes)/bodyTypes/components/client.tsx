@@ -29,7 +29,7 @@ const BodyTypeClient: React.FC<BodyTypeClientProps> = ({ data }) => {
         </Button>
       </div>
       <Separator />
-      <DataTable columns={columns} data={data} searchKey="name" />
+      <DataTable columns={columns} data={data} searchKey="label" />
       <Heading title="API" description="API calls for Body Types" />
       <Separator />
       <ApiList entityName="bodyTypes" entityIdName="bodyTypesId" />

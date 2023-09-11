@@ -19,11 +19,12 @@ model Store {
   categories Category[] @relation("StoreToCategory")
   bodyTypes BodyType[] @relation("StoreToBodyType")
   makes Make[] @relation("StoreToMake")
-  // models Model[] @relation("StoreToModel")
   colors Color[] @relation("StoreToColor")
   products Product[] @relation("StoreToProduct")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+   @@index([id])
 }
 
 model Billboard {
@@ -37,6 +38,7 @@ model Billboard {
   updatedAt DateTime @updatedAt
 
   @@index([storeId])
+  @@index([label])
 }
 
 model Category {
@@ -52,6 +54,7 @@ model Category {
 
   @@index([storeId])
   @@index([billboardId])
+  @@index([name])
 }
 
 model BodyType {
@@ -65,11 +68,12 @@ model BodyType {
   updatedAt DateTime @updatedAt
 
   @@index([storeId])
+  @@index([label])
 }
 model Make {
   id String @id @default(uuid())
   storeId String
-  store Store @relation("StoreToMake", fields: [storeId], references: [id])
+  store Store @relation("StoreToMake", fields: [storeId], references: [id], onDelete: Cascade)
   label String @unique
   models Model[] @relation("MakeToModel")
   products Product[]
@@ -77,21 +81,20 @@ model Make {
   updatedAt DateTime @updatedAt
 
   @@index([storeId])
-
+  @@index([label])
 }
+
 model Model {
   id String @id @default(uuid())
-  // storeId String
-  // store Store @relation("StoreToModel", fields: [storeId], references: [id])
-  name String @unique
+  label String @unique
   products Product[]
   makeId String
-  make Make @relation("MakeToModel",fields: [makeId], references: [id], onDelete: Cascade)
+  make Make @relation("MakeToModel",fields: [makeId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([makeId])
-  // @@index([storeId])
+  @@index([label])
 
 }
 model Color {
@@ -105,6 +108,7 @@ model Color {
   updatedAt DateTime @updatedAt
 
   @@index([storeId])
+  @@index([name])
 }
 
 
@@ -141,6 +145,7 @@ model Product {
   @@index([makeId])
   @@index([modelId])
   @@index([colorId])
+  @@index([name])
 }
 
 
