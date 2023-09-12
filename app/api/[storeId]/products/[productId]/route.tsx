@@ -18,7 +18,9 @@ export async function GET(
         images: true,
         category: true,
         color: true,
-        size: true,
+        bodyType: true,
+        make: true,
+        model: true,
       },
     });
 
@@ -42,8 +44,15 @@ export async function PATCH(
       price,
       categoryId,
       colorId,
-      sizeId,
+      bodyTypeId,
+      makeId,
+      modelId,
       images,
+      mileage,
+      year,
+      fuel,
+      gearbox,
+      typeOfDrive,
       isArchived,
       isFeatured,
     } = body;
@@ -63,9 +72,31 @@ export async function PATCH(
     if (!colorId) {
       return new NextResponse('Color id  is required', { status: 400 });
     }
-    if (!sizeId) {
-      return new NextResponse('Size id  is required', { status: 400 });
+    if (!bodyTypeId) {
+      return new NextResponse('Body Type id  is required', { status: 400 });
     }
+    if (!makeId) {
+      return new NextResponse('Make id  is required', { status: 400 });
+    }
+    if (!modelId) {
+      return new NextResponse('Model id  is required', { status: 400 });
+    }
+    if (!mileage) {
+      return new NextResponse('Mileage is required', { status: 400 });
+    }
+    if (!year) {
+      return new NextResponse('Yea  is required', { status: 400 });
+    }
+    if (!fuel) {
+      return new NextResponse('Fuel is required', { status: 400 });
+    }
+    if (!gearbox) {
+      return new NextResponse('Gearbox is required', { status: 400 });
+    }
+    if (!typeOfDrive) {
+      return new NextResponse('Type Of Drive is required', { status: 400 });
+    }
+
     if (!images || !images.length) {
       return new NextResponse('Images id  is required', { status: 400 });
     }
@@ -89,9 +120,16 @@ export async function PATCH(
         price,
         categoryId,
         colorId,
-        sizeId,
+        bodyTypeId,
+        makeId,
+        modelId,
         isArchived,
         isFeatured,
+        mileage,
+        year,
+        fuel,
+        gearbox,
+        typeOfDrive,
         storeId: params.storeId,
         images: {
           deleteMany: {},

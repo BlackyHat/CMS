@@ -37,7 +37,7 @@ const CellAction: React.FC<CellActionProps> = ({ data }) => {
       router.refresh();
       toast.success('Product deleted.');
     } catch (error) {
-      toast.error('MSomething went wrong.');
+      toast.error('Something went wrong.');
     } finally {
       setLoading(false);
       setOpen(false);

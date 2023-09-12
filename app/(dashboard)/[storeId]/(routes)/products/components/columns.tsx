@@ -6,8 +6,10 @@ import { ColumnDef } from '@tanstack/react-table';
 export type ProductColumn = {
   id: string;
   name: string;
-  price: string;
-  size: string;
+  price: number;
+  bodyType: string;
+  make: string;
+  model: string;
   category: string;
   color: string;
   isFeatured: boolean;
@@ -37,8 +39,16 @@ export const columns: ColumnDef<ProductColumn>[] = [
     header: 'Category',
   },
   {
-    accessorKey: 'size',
-    header: 'Size',
+    accessorKey: 'bodyType',
+    header: 'Body Type',
+  },
+  {
+    accessorKey: 'make',
+    header: 'Make',
+  },
+  {
+    accessorKey: 'model',
+    header: 'Model',
   },
   {
     accessorKey: 'color',

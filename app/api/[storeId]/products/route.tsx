@@ -12,13 +12,20 @@ export async function POST(
 
     const {
       name,
+      images,
       price,
       categoryId,
+      bodyTypeId,
+      makeId,
+      modelId,
       colorId,
-      sizeId,
-      images,
       isArchived,
       isFeatured,
+      mileage,
+      year,
+      fuel,
+      gearbox,
+      typeOfDrive,
     } = body;
 
     if (!userId) {
@@ -36,8 +43,29 @@ export async function POST(
     if (!colorId) {
       return new NextResponse('Color id  is required', { status: 400 });
     }
-    if (!sizeId) {
-      return new NextResponse('Size id  is required', { status: 400 });
+    if (!bodyTypeId) {
+      return new NextResponse('Body Type id  is required', { status: 400 });
+    }
+    if (!makeId) {
+      return new NextResponse('Make id  is required', { status: 400 });
+    }
+    if (!modelId) {
+      return new NextResponse('Model id  is required', { status: 400 });
+    }
+    if (!mileage) {
+      return new NextResponse('Mileage is required', { status: 400 });
+    }
+    if (!year) {
+      return new NextResponse('Yea  is required', { status: 400 });
+    }
+    if (!fuel) {
+      return new NextResponse('Fuel is required', { status: 400 });
+    }
+    if (!gearbox) {
+      return new NextResponse('Gearbox is required', { status: 400 });
+    }
+    if (!typeOfDrive) {
+      return new NextResponse('Type Of Drive is required', { status: 400 });
     }
     if (!images || !images.length) {
       return new NextResponse('Images id  is required', { status: 400 });
@@ -58,10 +86,17 @@ export async function POST(
         name,
         price,
         categoryId,
+        bodyTypeId,
+        makeId,
+        modelId,
         colorId,
-        sizeId,
         isArchived,
         isFeatured,
+        mileage,
+        year,
+        fuel,
+        gearbox,
+        typeOfDrive,
         storeId: params.storeId,
         images: {
           createMany: {
@@ -85,7 +120,9 @@ export async function GET(
     const { searchParams } = new URL(req.url);
     const categoryId = searchParams.get('categoryId') || undefined;
     const colorId = searchParams.get('colorId') || undefined;
-    const sizeId = searchParams.get('sizeId') || undefined;
+    const bodyTypeId = searchParams.get('bodyTypeId') || undefined;
+    const makeId = searchParams.get('makeId') || undefined;
+    const modelId = searchParams.get('modelId') || undefined;
     const isFeatured = searchParams.get('isFeatured');
 
     if (!params.storeId) {
@@ -97,7 +134,9 @@ export async function GET(
         storeId: params.storeId,
         categoryId,
         colorId,
-        sizeId,
+        bodyTypeId,
+        makeId,
+        modelId,
         isFeatured: isFeatured ? true : undefined,
         isArchived: false,
       },
@@ -105,7 +144,9 @@ export async function GET(
         images: true,
         category: true,
         color: true,
-        size: true,
+        bodyType: true,
+        make: true,
+        model: true,
       },
       orderBy: {
         createdAt: 'desc',
