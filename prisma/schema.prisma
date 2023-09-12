@@ -131,6 +131,32 @@ model Product {
   model Model @relation(fields: [modelId], references: [id])
   colorId String
   color Color @relation(fields: [colorId], references: [id])
+  //description String
+  //Endine size*
+  //Color is Metallic
+  //isCrashed
+  //Buy from country
+  //region + town String
+  //phone number
+  //description String
+  //VIN-code String
+
+  //split product form on main info + additional info that non required
+//FORM for options: tru or false: Кондиціонер
+//  Електросклопідйомники
+//  Матеріали салону
+//  Колір салону
+//  Підсилювач керма
+//  Регулювання керма
+//  Запасне колесо
+//  Фари
+//  Регулювання сидінь салону по висоті
+//  Пам'ять положення сидіння
+//  Підігрів сидінь
+//  Вентиляція сидінь
+
+//CheckBox for rights policy
+
   year Int
   fuel FuelType
   gearbox GearboxType
