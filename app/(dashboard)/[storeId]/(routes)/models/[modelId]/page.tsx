@@ -14,7 +14,7 @@ const ModelsPage = async ({
 
   const makes = await prismadb.make.findMany({
     where: { storeId: params.storeId },
-    orderBy: { createdAt: 'asc' },
+    orderBy: { label: 'asc' },
   });
   return (
     <div className="flex-col">

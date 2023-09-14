@@ -21,7 +21,7 @@ const BodyTypeClient: React.FC<BodyTypeClientProps> = ({ data }) => {
       <div className="flex items-center justify-between">
         <Heading
           title={`Body Types (${data.length})`}
-          description="Manage Body Types for your store"
+          description="Manage body types for your store"
         />
         <Button onClick={() => router.push(`/${params.storeId}/bodyTypes/new`)}>
           <Plus className="mr-2 h-4 w-4" />

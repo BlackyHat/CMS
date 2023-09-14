@@ -131,31 +131,35 @@ model Product {
   model Model @relation(fields: [modelId], references: [id])
   colorId String
   color Color @relation(fields: [colorId], references: [id])
-  //description String
-  //Endine size*
-  //Color is Metallic
-  //isCrashed
-  //Buy from country
-  //region + town String
-  //phone number
-  //description String
-  //VIN-code String
 
-  //split product form on main info + additional info that non required
-//FORM for options: tru or false: Кондиціонер
-//  Електросклопідйомники
-//  Матеріали салону
-//  Колір салону
-//  Підсилювач керма
-//  Регулювання керма
-//  Запасне колесо
-//  Фари
-//  Регулювання сидінь салону по висоті
-//  Пам'ять положення сидіння
-//  Підігрів сидінь
-//  Вентиляція сидінь
+  description String
+  phone Int
 
-//CheckBox for rights policy
+  regionId String
+  region Region @relation(fields: [regionId], references: [id])
+  cityId String
+  city City @relation(fields: [cityId], references: [id])
+
+  engineSize String?
+  vinCode String? 
+  headlights Headlights? 
+  spareTire SpareTire?
+  interiorMatherial InteriorMatherial?
+  isCrashed Boolean @default(false)
+  airConditioner Boolean @default(false)
+  androidAuto Boolean @default(false)
+  heatedSteeringWheel Boolean @default(false)
+  electricWindows Boolean @default(false)
+  electricSideMirrors Boolean @default(false)
+  electricSeatAdjustment Boolean @default(false)
+  isofix Boolean @default(false)
+  navigationSystem Boolean @default(false)
+  seatVentilation Boolean @default(false)
+  seatHeating Boolean @default(false)
+  soundSystem Boolean @default(false)
+  sportSeats Boolean @default(false)
+
+  //TODO: CheckBox for rights policy
 
   year Int
   fuel FuelType
@@ -171,6 +175,8 @@ model Product {
   @@index([makeId])
   @@index([modelId])
   @@index([colorId])
+  @@index([regionId])
+  @@index([cityId])
   @@index([name])
 }
 
@@ -184,6 +190,28 @@ model Image {
   updatedAt DateTime @updatedAt
 
   @@index([productId])
+}
+model Region {
+  id String @id @default(uuid())
+  products Product[]
+  name String
+  cities City[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([name])
+}
+model City {
+  id String @id @default(uuid())
+  products Product[]
+  regionId String
+  region Region @relation(fields: [regionId], references: [id], onDelete:Cascade)
+  name String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([regionId])
+  @@index([name])
 }
 
 enum FuelType {
@@ -202,5 +230,24 @@ enum GearboxType {
 enum TypeOfDriveOption {
   ALL_WD
   AWD
+}
+enum Headlights {
+HALOGEN
+MATRIX
+LED
+LASER
+XENON_BIXENON
+}
+enum SpareTire {
+FULL_SIZE
+JOCKEY 
+}
+enum InteriorMatherial {
+TEXTILE
+LEATHER
+VELOR
+COMBINED
+ECO_LEATHER
+ALCANTARA
 }
 

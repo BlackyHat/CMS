@@ -573,6 +573,13 @@ const ProductForm: React.FC<ProductFormProps> = ({
                 </FormItem>
               )}
             />
+          </div>
+          <Separator />
+          <Heading
+            title="Additional data"
+            description="Check some preset config of your car"
+          />
+          <div className="grid grid-cols-3 gap-8">
             <FormField
               control={form.control}
               name="isFeatured"
@@ -614,7 +621,18 @@ const ProductForm: React.FC<ProductFormProps> = ({
               )}
             />
           </div>
-          <Button disabled={loading} className="ml-auto" type="submit">
+          <Separator />
+          <Heading
+            title="Contact information"
+            description="Type contact information"
+          />
+          <div className="grid grid-cols-3 gap-8"></div>
+          <Button
+            disabled={loading}
+            className="ml-auto"
+            type="submit"
+            size="lg"
+          >
             {action}
           </Button>
         </form>

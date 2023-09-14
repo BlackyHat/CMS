@@ -22,7 +22,7 @@ const MakesClient: React.FC<MakesClientProps> = ({ data }) => {
       <div className="flex items-center justify-between">
         <Heading
           title={`Makes (${data.length})`}
-          description="Manage Makes for your store"
+          description="Manage makes for your store"
         />
         <Button onClick={() => router.push(`/${params.storeId}/makes/new`)}>
           <Plus className="mr-2 h-4 w-4" />

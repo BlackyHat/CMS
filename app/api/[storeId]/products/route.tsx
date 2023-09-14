@@ -1,5 +1,6 @@
 import prismadb from '@/lib/prismadb';
 import { auth } from '@clerk/nextjs';
+import { Product } from '@prisma/client';
 import { NextResponse } from 'next/server';
 
 export async function POST(
@@ -26,52 +27,75 @@ export async function POST(
       fuel,
       gearbox,
       typeOfDrive,
+      description,
+      phone,
+      regionId,
+      cityId,
+      engineSize,
+      vinCode,
+      headlights,
+      spareTire,
+      interiorMatherial,
+      isCrashed,
+      airConditioner,
+      androidAuto,
+      heatedSteeringWheel,
+      electricWindows,
+      electricSideMirrors,
+      electricSeatAdjustment,
+      isofix,
+      navigationSystem,
+      seatVentilation,
+      seatHeating,
+      soundSystem,
+      sportSeats,
     } = body;
 
     if (!userId) {
       return new NextResponse('Unauthenticated', { status: 401 });
     }
-    if (!name) {
-      return new NextResponse('Name is required', { status: 400 });
+
+    const validateField = (value: keyof Product, fieldName: string) => {
+      if (Array.isArray(value) && value.length === 0) {
+        return new NextResponse(`${fieldName} is required`, { status: 400 });
+      }
+      if (!value) {
+        return new NextResponse(`${fieldName} is required`, { status: 400 });
+      }
+      return null;
+    };
+
+    const validationErrors = [];
+    const requiredFields = [
+      { value: params.storeId, fieldName: 'Store ID' },
+      { value: name, fieldName: 'Name' },
+      { value: price, fieldName: 'Price' },
+      { value: categoryId, fieldName: 'Category id' },
+      { value: bodyTypeId, fieldName: 'Body Type id' },
+      { value: makeId, fieldName: 'Make id' },
+      { value: modelId, fieldName: 'Model id' },
+      { value: colorId, fieldName: 'Color id' },
+      { value: mileage, fieldName: 'Mileage' },
+      { value: year, fieldName: 'Year' },
+      { value: fuel, fieldName: 'Fuel' },
+      { value: gearbox, fieldName: 'Gearbox' },
+      { value: typeOfDrive, fieldName: 'Type Of Drive' },
+      { value: description, fieldName: 'Description' },
+      { value: phone, fieldName: 'Phone' },
+      { value: images, fieldName: 'Images' },
+      { value: regionId, fieldName: 'Region' },
+      { value: cityId, fieldName: 'City' },
+    ];
+
+    for (const field of requiredFields) {
+      const error = validateField(field.value, field.fieldName);
+      if (error) {
+        validationErrors.push(error);
+      }
     }
-    if (!price) {
-      return new NextResponse('Price is required', { status: 400 });
-    }
-    if (!categoryId) {
-      return new NextResponse('Category id is required', { status: 400 });
-    }
-    if (!colorId) {
-      return new NextResponse('Color id  is required', { status: 400 });
-    }
-    if (!bodyTypeId) {
-      return new NextResponse('Body Type id  is required', { status: 400 });
-    }
-    if (!makeId) {
-      return new NextResponse('Make id  is required', { status: 400 });
-    }
-    if (!modelId) {
-      return new NextResponse('Model id  is required', { status: 400 });
-    }
-    if (!mileage) {
-      return new NextResponse('Mileage is required', { status: 400 });
-    }
-    if (!year) {
-      return new NextResponse('Yea  is required', { status: 400 });
-    }
-    if (!fuel) {
-      return new NextResponse('Fuel is required', { status: 400 });
-    }
-    if (!gearbox) {
-      return new NextResponse('Gearbox is required', { status: 400 });
-    }
-    if (!typeOfDrive) {
-      return new NextResponse('Type Of Drive is required', { status: 400 });
-    }
-    if (!images || !images.length) {
-      return new NextResponse('Images id  is required', { status: 400 });
-    }
-    if (!params.storeId) {
-      return new NextResponse('Store ID is required', { status: 400 });
+
+    if (validationErrors.length > 0) {
+      return validationErrors[0];
     }
 
     const storeByUserId = await prismadb.store.findFirst({
@@ -81,8 +105,21 @@ export async function POST(
     if (!storeByUserId) {
       return new NextResponse('Unauthorized', { status: 403 });
     }
+
+    // const productData: Partial<Product> = {
+
+    // };
+
+    // for (const key in additionalParams) {
+    //   if (key !== undefined) {
+    //     productData[key as string] = additionalParams[
+    //       key
+    //     ] as Product[keyof Product];
+    //   }
+    // }
     const product = await prismadb.product.create({
       data: {
+        storeId: params.storeId,
         name,
         price,
         categoryId,
@@ -97,7 +134,28 @@ export async function POST(
         fuel,
         gearbox,
         typeOfDrive,
-        storeId: params.storeId,
+        description,
+        phone,
+        regionId,
+        cityId,
+        engineSize,
+        vinCode,
+        headlights,
+        spareTire,
+        interiorMatherial,
+        isCrashed,
+        airConditioner,
+        androidAuto,
+        heatedSteeringWheel,
+        electricWindows,
+        electricSideMirrors,
+        electricSeatAdjustment,
+        isofix,
+        navigationSystem,
+        seatVentilation,
+        seatHeating,
+        soundSystem,
+        sportSeats,
         images: {
           createMany: {
             data: [...images.map((image: { url: string }) => image)],
@@ -123,6 +181,8 @@ export async function GET(
     const bodyTypeId = searchParams.get('bodyTypeId') || undefined;
     const makeId = searchParams.get('makeId') || undefined;
     const modelId = searchParams.get('modelId') || undefined;
+    const regionId = searchParams.get('regionId') || undefined;
+    const cityId = searchParams.get('cityId') || undefined;
     const isFeatured = searchParams.get('isFeatured');
 
     if (!params.storeId) {
@@ -137,6 +197,8 @@ export async function GET(
         bodyTypeId,
         makeId,
         modelId,
+        regionId,
+        cityId,
         isFeatured: isFeatured ? true : undefined,
         isArchived: false,
       },

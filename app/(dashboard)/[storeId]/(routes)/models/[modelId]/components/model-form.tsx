@@ -177,7 +177,10 @@ const ModelForm: React.FC<ModelFormProps> = ({ initialData, makes }) => {
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
-                    <PopoverContent className="lg:w-[380px] sm:w-[180px] p-0">
+                    <PopoverContent
+                      className="p-0 overflow-y-auto h-64"
+                      align="start"
+                    >
                       <Command>
                         <CommandInput placeholder="Search make..." />
                         <CommandEmpty>No make found.</CommandEmpty>
@@ -189,7 +192,7 @@ const ModelForm: React.FC<ModelFormProps> = ({ initialData, makes }) => {
                               disabled={loading}
                               onSelect={() => {
                                 form.setValue('makeId', id);
-                                setOpenPopover;
+                                setOpenPopover(false);
                                 false;
                               }}
                             >

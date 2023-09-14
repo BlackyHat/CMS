@@ -22,7 +22,7 @@ const ModelsClient: React.FC<ModelsClientProps> = ({ data }) => {
       <div className="flex items-center justify-between">
         <Heading
           title={`Models (${data.length})`}
-          description="Manage Models for your store"
+          description="Manage models for your store"
         />
         <Button onClick={() => router.push(`/${params.storeId}/models/new`)}>
           <Plus className="mr-2 h-4 w-4" />
