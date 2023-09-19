@@ -37,6 +37,10 @@ const ProductsPage = async ({
       storeId: params.storeId,
     },
   });
+  const regions = await prismadb.region.findMany({
+    include: { cities: true },
+    orderBy: { name: 'asc' },
+  });
 
   return (
     <div className="flex-col">
@@ -47,6 +51,7 @@ const ProductsPage = async ({
           bodyTypes={bodyTypes}
           makes={makes}
           colors={colors}
+          regions={regions}
         />
       </div>
     </div>

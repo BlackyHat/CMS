@@ -114,6 +114,7 @@ model Color {
 
 model Product {
   id String @id @default(uuid())
+  ownerId String
   storeId String
   store Store @relation("StoreToProduct", fields: [storeId], references: [id])
   categoryId String
@@ -133,7 +134,7 @@ model Product {
   color Color @relation(fields: [colorId], references: [id])
 
   description String
-  phone Int
+  phone String
 
   regionId String
   region Region @relation(fields: [regionId], references: [id])
@@ -195,7 +196,7 @@ model Region {
   id String @id @default(uuid())
   products Product[]
   name String
-  cities City[]
+  cities City[] 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { useParams, usePathname } from 'next/navigation';
 
-const MainNav = ({
+const ProductsNav = ({
   className,
   ...props
 }: React.HTMLAttributes<HTMLElement>) => {
@@ -13,25 +13,39 @@ const MainNav = ({
 
   const routes = [
     {
-      href: `/${params.storeId}`,
+      href: `/${params.storeId}/products`,
       label: 'Overview',
-      active: pathname === `/${params.storeId}`,
+      active: pathname === `/${params.storeId}/products`,
     },
-
     {
       href: `/${params.storeId}/categories`,
       label: 'Categories',
       active: pathname === `/${params.storeId}/categories`,
     },
     {
-      href: `/${params.storeId}/products`,
-      label: 'Products',
-      active: pathname === `/${params.storeId}/products`,
+      href: `/${params.storeId}/billboards`,
+      label: 'Billboards',
+      active: pathname === `/${params.storeId}/billboards`,
     },
     {
-      href: `/${params.storeId}/settings`,
-      label: 'Settings',
-      active: pathname === `/${params.storeId}/settings`,
+      href: `/${params.storeId}/bodyTypes`,
+      label: 'Body Types',
+      active: pathname === `/${params.storeId}/bodyTypes`,
+    },
+    {
+      href: `/${params.storeId}/makes`,
+      label: 'Makes',
+      active: pathname === `/${params.storeId}/makes`,
+    },
+    {
+      href: `/${params.storeId}/models`,
+      label: 'Models',
+      active: pathname === `/${params.storeId}/models`,
+    },
+    {
+      href: `/${params.storeId}/colors`,
+      label: 'Colors',
+      active: pathname === `/${params.storeId}/colors`,
     },
   ];
   return (
@@ -54,4 +68,4 @@ const MainNav = ({
   );
 };
 
-export default MainNav;
+export default ProductsNav;

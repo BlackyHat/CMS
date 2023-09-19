@@ -8,7 +8,7 @@ export async function POST(
   { params }: { params: { storeId: string } }
 ) {
   try {
-    const { userId } = auth();
+    const { userId, sessionClaims } = auth();
     const body = await req.json();
 
     const {
@@ -53,6 +53,9 @@ export async function POST(
 
     if (!userId) {
       return new NextResponse('Unauthenticated', { status: 401 });
+    }
+    if (sessionClaims.role !== 'ADMIN') {
+      return new NextResponse('Forbidden', { status: 403 });
     }
 
     const validateField = (value: keyof Product, fieldName: string) => {
@@ -106,20 +109,10 @@ export async function POST(
       return new NextResponse('Unauthorized', { status: 403 });
     }
 
-    // const productData: Partial<Product> = {
-
-    // };
-
-    // for (const key in additionalParams) {
-    //   if (key !== undefined) {
-    //     productData[key as string] = additionalParams[
-    //       key
-    //     ] as Product[keyof Product];
-    //   }
-    // }
     const product = await prismadb.product.create({
       data: {
         storeId: params.storeId,
+        ownerId: userId,
         name,
         price,
         categoryId,

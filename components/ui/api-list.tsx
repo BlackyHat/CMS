@@ -6,9 +6,14 @@ import React from 'react';
 interface ApiListProps {
   entityName: string;
   entityIdName: string;
+  variant?: 'admin' | 'admin_owner';
 }
 
-const ApiList: React.FC<ApiListProps> = ({ entityName, entityIdName }) => {
+const ApiList: React.FC<ApiListProps> = ({
+  entityName,
+  entityIdName,
+  variant = 'admin',
+}) => {
   const params = useParams();
   const origin = useOrigin();
 
@@ -27,17 +32,17 @@ const ApiList: React.FC<ApiListProps> = ({ entityName, entityIdName }) => {
       />
       <ApiAlert
         title="POST"
-        variant="admin"
+        variant={variant}
         description={`${baseUrl}/${entityName}`}
       />
       <ApiAlert
         title="PATCH"
-        variant="admin"
+        variant={variant}
         description={`${baseUrl}/${entityName}/${entityIdName}`}
       />
       <ApiAlert
         title="DELETE"
-        variant="admin"
+        variant={variant}
         description={`${baseUrl}/${entityName}/${entityIdName}`}
       />
     </>

@@ -6,8 +6,8 @@ export async function POST(
   req: Request,
   { params }: { params: { storeId: string } }
 ) {
+  const { userId, sessionId } = auth();
   try {
-    const { userId } = auth();
     const body = await req.json();
 
     const { label, imageUrl } = body;

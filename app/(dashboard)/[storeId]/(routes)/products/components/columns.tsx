@@ -5,13 +5,10 @@ import { ColumnDef } from '@tanstack/react-table';
 
 export type ProductColumn = {
   id: string;
-  name: string;
-  price: number;
-  bodyType: string;
   make: string;
   model: string;
-  category: string;
-  color: string;
+  price: number;
+  region: string;
   isFeatured: boolean;
   isArchived: boolean;
   createdAt: string;
@@ -19,36 +16,21 @@ export type ProductColumn = {
 
 export const columns: ColumnDef<ProductColumn>[] = [
   {
-    accessorKey: 'name',
-    header: 'Name',
-  },
-  {
-    accessorKey: 'isArchived',
-    header: 'Archived',
-  },
-  {
-    accessorKey: 'isFeatured',
-    header: 'Featured',
-  },
-  {
-    accessorKey: 'price',
-    header: 'Price',
-  },
-  {
-    accessorKey: 'category',
-    header: 'Category',
-  },
-  {
-    accessorKey: 'bodyType',
-    header: 'Body Type',
-  },
-  {
     accessorKey: 'make',
     header: 'Make',
   },
   {
     accessorKey: 'model',
     header: 'Model',
+  },
+  {
+    accessorKey: 'price',
+    header: 'Price',
+  },
+  { accessorKey: 'isArchived', header: 'Archived' },
+  {
+    accessorKey: 'isFeatured',
+    header: 'Featured',
   },
   {
     accessorKey: 'createdAt',

@@ -2,19 +2,9 @@ import Heading from '@/components/heading';
 import Overview from '@/components/overview';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import prismadb from '@/lib/prismadb';
 import { CreditCard, DollarSign, Package } from 'lucide-react';
 
-interface DashboardPageProps {
-  params: { storeId: string };
-}
-
-const DashboardPage: React.FC<DashboardPageProps> = async ({ params }) => {
-  const store = await prismadb.store.findFirst({
-    where: {
-      id: params.storeId,
-    },
-  });
+const DashboardPage = async () => {
   return (
     <div className="flex-col">
       <div className="flex-1 space-y-4 p-8 pt-6">

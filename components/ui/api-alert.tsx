@@ -9,16 +9,18 @@ import { toast } from 'react-hot-toast';
 interface ApiAlertProps {
   title: string;
   description: string;
-  variant: 'public' | 'admin';
+  variant: 'public' | 'admin' | 'admin_owner';
 }
 
 const textMap: Record<ApiAlertProps['variant'], string> = {
   public: 'Public',
   admin: 'Admin',
+  admin_owner: 'Admin, Owner',
 };
 const variantMap: Record<ApiAlertProps['variant'], BadgeProps['variant']> = {
   public: 'secondary',
   admin: 'destructive',
+  admin_owner: 'destructive',
 };
 
 export const ApiAlert: React.FC<ApiAlertProps> = ({

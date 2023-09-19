@@ -27,13 +27,18 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import {
   BodyType,
   Category,
+  City,
   Color,
   FuelType,
   GearboxType,
+  Headlights,
   Image,
+  InteriorMatherial,
   Make,
   Model,
   Product,
+  Region,
+  SpareTire,
   TypeOfDriveOption,
 } from '@prisma/client';
 import axios from 'axios';
@@ -53,6 +58,12 @@ const formSchema = z.object({
   fuel: z.nativeEnum(FuelType),
   gearbox: z.nativeEnum(GearboxType),
   typeOfDrive: z.nativeEnum(TypeOfDriveOption),
+
+  regionId: z.string().min(1),
+  cityId: z.string().min(1),
+  description: z.string().min(1),
+  phone: z.string().min(1),
+
   images: z.object({ url: z.string() }).array(),
   price: z.coerce.number().min(1),
   categoryId: z.string().min(1),
@@ -62,6 +73,26 @@ const formSchema = z.object({
   colorId: z.string().min(1),
   isFeatured: z.boolean().default(false).optional(),
   isArchived: z.boolean().default(false).optional(),
+
+  engineSize: z.string().min(1).optional(),
+  vinCode: z.string().min(1).optional(),
+  headlights: z.nativeEnum(Headlights).optional(),
+  spareTire: z.nativeEnum(SpareTire).optional(),
+  interiorMatherial: z.nativeEnum(InteriorMatherial).optional(),
+
+  isCrashed: z.boolean().default(false).optional(),
+  airConditioner: z.boolean().default(false).optional(),
+  androidAuto: z.boolean().default(false).optional(),
+  heatedSteeringWheel: z.boolean().default(false).optional(),
+  electricWindows: z.boolean().default(false).optional(),
+  electricSideMirrors: z.boolean().default(false).optional(),
+  electricSeatAdjustment: z.boolean().default(false).optional(),
+  isofix: z.boolean().default(false).optional(),
+  navigationSystem: z.boolean().default(false).optional(),
+  seatVentilation: z.boolean().default(false).optional(),
+  seatHeating: z.boolean().default(false).optional(),
+  soundSystem: z.boolean().default(false).optional(),
+  sportSeats: z.boolean().default(false).optional(),
 });
 type ProductFormValues = z.infer<typeof formSchema>;
 
@@ -71,6 +102,7 @@ interface ProductFormProps {
   bodyTypes: BodyType[];
   makes: (Make & { models: Model[] })[];
   colors: Color[];
+  regions: (Region & { cities: City[] })[];
 }
 
 const ProductForm: React.FC<ProductFormProps> = ({
@@ -79,12 +111,14 @@ const ProductForm: React.FC<ProductFormProps> = ({
   bodyTypes,
   makes,
   colors,
+  regions,
 }) => {
   const params = useParams();
   const router = useRouter();
 
   const [open, setOpen] = useState(false);
   const [choosedModels, setChoosedModels] = useState<Model[]>([]);
+  const [choosedCity, setChoosedCity] = useState<City[]>([]);
   const [loading, setLoading] = useState(false);
 
   const title = initialData ? 'Edit product' : 'Create product';
@@ -105,6 +139,9 @@ const ProductForm: React.FC<ProductFormProps> = ({
           makeId: undefined,
           modelId: undefined,
           colorId: undefined,
+          regionId: undefined,
+          description: undefined,
+          cityId: undefined,
           mileage: undefined,
           year: undefined,
           fuel: undefined,
@@ -129,6 +166,16 @@ const ProductForm: React.FC<ProductFormProps> = ({
       setChoosedModels(choosedMake?.models);
     }
   }, [selectedMakeId, makes]);
+
+  const selectedRegionId = form.watch('regionId');
+  useEffect(() => {
+    if (selectedRegionId) {
+      const [choosedRegion] = regions.filter(
+        ({ id }) => id === selectedRegionId
+      );
+      setChoosedCity(choosedRegion?.cities);
+    }
+  }, [selectedRegionId, regions]);
 
   const onSubmit = async (data: ProductFormValues) => {
     try {
