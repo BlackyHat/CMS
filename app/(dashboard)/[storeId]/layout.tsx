@@ -11,15 +11,15 @@ export default async function DashboardLayout({
   children: React.ReactNode;
   params: { storeId: string };
 }) {
-  const { userId, sessionClaims } = auth();
-
+  const { userId } = auth();
+  // const { userId, sessionClaims } = auth();
   if (!userId) {
     redirect('/sign-in');
   }
 
-  if (sessionClaims.role !== 'ADMIN') {
-    redirect('/sign-in');
-  }
+  // if (sessionClaims.role !== 'ADMIN') {
+  //   return <h1>Access denied.</h1>;
+  // }
 
   const store = await prismadb.store.findFirst({
     where: {
