@@ -1,6 +1,6 @@
 import prismadb from '@/lib/prismadb';
+import { validateFields } from '@/utils/validateUtils';
 import { auth } from '@clerk/nextjs';
-import { Product } from '@prisma/client';
 import { NextResponse } from 'next/server';
 
 export async function POST(
@@ -8,7 +8,7 @@ export async function POST(
   { params }: { params: { storeId: string } }
 ) {
   try {
-    const { userId, sessionClaims } = auth();
+    const { userId } = auth();
     const body = await req.json();
 
     const {
@@ -54,21 +54,7 @@ export async function POST(
     if (!userId) {
       return new NextResponse('Unauthenticated', { status: 401 });
     }
-    if (sessionClaims.role !== 'ADMIN') {
-      return new NextResponse('Forbidden', { status: 403 });
-    }
 
-    const validateField = (value: keyof Product, fieldName: string) => {
-      if (Array.isArray(value) && value.length === 0) {
-        return new NextResponse(`${fieldName} is required`, { status: 400 });
-      }
-      if (!value) {
-        return new NextResponse(`${fieldName} is required`, { status: 400 });
-      }
-      return null;
-    };
-
-    const validationErrors = [];
     const requiredFields = [
       { value: params.storeId, fieldName: 'Store ID' },
       { value: name, fieldName: 'Name' },
@@ -90,16 +76,7 @@ export async function POST(
       { value: cityId, fieldName: 'City' },
     ];
 
-    for (const field of requiredFields) {
-      const error = validateField(field.value, field.fieldName);
-      if (error) {
-        validationErrors.push(error);
-      }
-    }
-
-    if (validationErrors.length > 0) {
-      return validationErrors[0];
-    }
+    validateFields(requiredFields);
 
     const storeByUserId = await prismadb.store.findFirst({
       where: { id: params.storeId, userId },

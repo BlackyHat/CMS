@@ -7,7 +7,7 @@ export async function PATCH(
   { params }: { params: { storeId: string } }
 ) {
   try {
-    const { userId } = auth();
+    const { userId, sessionClaims } = auth();
     const body = await req.json();
 
     const { name } = body;
@@ -15,6 +15,10 @@ export async function PATCH(
     if (!userId) {
       return new NextResponse('Unauthenticated', { status: 401 });
     }
+    if (sessionClaims.role !== UserRoles.ADMIN) {
+      return new NextResponse('Forbidden', { status: 403 });
+    }
+
     if (!name) {
       return new NextResponse('Name is required', { status: 400 });
     }
@@ -40,10 +44,13 @@ export async function DELETE(
   { params }: { params: { storeId: string } }
 ) {
   try {
-    const { userId } = auth();
+    const { userId, sessionClaims } = auth();
 
     if (!userId) {
       return new NextResponse('Unauthenticated', { status: 401 });
+    }
+    if (sessionClaims.role !== UserRoles.ADMIN) {
+      return new NextResponse('Forbidden', { status: 403 });
     }
     if (!params.storeId) {
       return new NextResponse('Store is required', { status: 400 });

@@ -1,4 +1,5 @@
 import prismadb from '@/lib/prismadb';
+import { validateFields } from '@/utils/validateUtils';
 import { auth } from '@clerk/nextjs';
 import { NextResponse } from 'next/server';
 
@@ -36,73 +37,79 @@ export async function PATCH(
   { params }: { params: { storeId: string; productId: string } }
 ) {
   try {
-    const { userId } = auth();
+    const { userId, sessionClaims } = auth();
     const body = await req.json();
 
     const {
+      ownerId,
       name,
+      images,
       price,
       categoryId,
-      colorId,
       bodyTypeId,
       makeId,
       modelId,
-      images,
+      colorId,
+      isArchived,
+      isFeatured,
       mileage,
       year,
       fuel,
       gearbox,
       typeOfDrive,
-      isArchived,
-      isFeatured,
+      description,
+      phone,
+      regionId,
+      cityId,
+      engineSize,
+      vinCode,
+      headlights,
+      spareTire,
+      interiorMatherial,
+      isCrashed,
+      airConditioner,
+      androidAuto,
+      heatedSteeringWheel,
+      electricWindows,
+      electricSideMirrors,
+      electricSeatAdjustment,
+      isofix,
+      navigationSystem,
+      seatVentilation,
+      seatHeating,
+      soundSystem,
+      sportSeats,
     } = body;
 
     if (!userId) {
       return new NextResponse('Unauthenticated', { status: 401 });
     }
-    if (!name) {
-      return new NextResponse('Name is required', { status: 400 });
-    }
-    if (!price) {
-      return new NextResponse('Price is required', { status: 400 });
-    }
-    if (!categoryId) {
-      return new NextResponse('Category id is required', { status: 400 });
-    }
-    if (!colorId) {
-      return new NextResponse('Color id  is required', { status: 400 });
-    }
-    if (!bodyTypeId) {
-      return new NextResponse('Body Type id  is required', { status: 400 });
-    }
-    if (!makeId) {
-      return new NextResponse('Make id  is required', { status: 400 });
-    }
-    if (!modelId) {
-      return new NextResponse('Model id  is required', { status: 400 });
-    }
-    if (!mileage) {
-      return new NextResponse('Mileage is required', { status: 400 });
-    }
-    if (!year) {
-      return new NextResponse('Yea  is required', { status: 400 });
-    }
-    if (!fuel) {
-      return new NextResponse('Fuel is required', { status: 400 });
-    }
-    if (!gearbox) {
-      return new NextResponse('Gearbox is required', { status: 400 });
-    }
-    if (!typeOfDrive) {
-      return new NextResponse('Type Of Drive is required', { status: 400 });
+    if (userId !== ownerId || sessionClaims.role !== UserRoles.ADMIN) {
+      return new NextResponse('Forbidden', { status: 403 });
     }
 
-    if (!images || !images.length) {
-      return new NextResponse('Images id  is required', { status: 400 });
-    }
-    if (!params.productId) {
-      return new NextResponse('Product id is required', { status: 400 });
-    }
+    const requiredFields = [
+      { value: params.storeId, fieldName: 'Store ID' },
+      { value: name, fieldName: 'Name' },
+      { value: price, fieldName: 'Price' },
+      { value: categoryId, fieldName: 'Category id' },
+      { value: bodyTypeId, fieldName: 'Body Type id' },
+      { value: makeId, fieldName: 'Make id' },
+      { value: modelId, fieldName: 'Model id' },
+      { value: colorId, fieldName: 'Color id' },
+      { value: mileage, fieldName: 'Mileage' },
+      { value: year, fieldName: 'Year' },
+      { value: fuel, fieldName: 'Fuel' },
+      { value: gearbox, fieldName: 'Gearbox' },
+      { value: typeOfDrive, fieldName: 'Type Of Drive' },
+      { value: description, fieldName: 'Description' },
+      { value: phone, fieldName: 'Phone' },
+      { value: images, fieldName: 'Images' },
+      { value: regionId, fieldName: 'Region' },
+      { value: cityId, fieldName: 'City' },
+    ];
+
+    validateFields(requiredFields);
 
     const storeByUserId = await prismadb.store.findFirst({
       where: { id: params.storeId, userId },
@@ -111,6 +118,7 @@ export async function PATCH(
     if (!storeByUserId) {
       return new NextResponse('Unauthorized', { status: 403 });
     }
+
     await prismadb.product.update({
       where: {
         id: params.productId,
@@ -119,10 +127,10 @@ export async function PATCH(
         name,
         price,
         categoryId,
-        colorId,
         bodyTypeId,
         makeId,
         modelId,
+        colorId,
         isArchived,
         isFeatured,
         mileage,
@@ -130,7 +138,28 @@ export async function PATCH(
         fuel,
         gearbox,
         typeOfDrive,
-        storeId: params.storeId,
+        description,
+        phone,
+        regionId,
+        cityId,
+        engineSize,
+        vinCode,
+        headlights,
+        spareTire,
+        interiorMatherial,
+        isCrashed,
+        airConditioner,
+        androidAuto,
+        heatedSteeringWheel,
+        electricWindows,
+        electricSideMirrors,
+        electricSeatAdjustment,
+        isofix,
+        navigationSystem,
+        seatVentilation,
+        seatHeating,
+        soundSystem,
+        sportSeats,
         images: {
           deleteMany: {},
         },
@@ -161,11 +190,12 @@ export async function DELETE(
   { params }: { params: { storeId: string; productId: string } }
 ) {
   try {
-    const { userId } = auth();
+    const { userId, sessionClaims } = auth();
 
     if (!userId) {
       return new NextResponse('Unauthenticated', { status: 401 });
     }
+
     if (!params.productId) {
       return new NextResponse('Product id is required', { status: 400 });
     }
@@ -176,10 +206,17 @@ export async function DELETE(
     if (!storeByUserId) {
       return new NextResponse('Unauthorized', { status: 403 });
     }
-    const product = await prismadb.product.deleteMany({
+    const product = await prismadb.product.findUnique({
       where: {
         id: params.productId,
       },
+    });
+
+    if (userId !== product?.ownerId || sessionClaims.role !== UserRoles.ADMIN) {
+      return new NextResponse('Forbidden', { status: 403 });
+    }
+    await prismadb.product.delete({
+      where: { id: params.productId },
     });
 
     return NextResponse.json(product);
