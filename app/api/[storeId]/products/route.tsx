@@ -78,14 +78,6 @@ export async function POST(
 
     validateFields(requiredFields);
 
-    const storeByUserId = await prismadb.store.findFirst({
-      where: { id: params.storeId, userId },
-    });
-
-    if (!storeByUserId) {
-      return new NextResponse('Unauthorized', { status: 403 });
-    }
-
     const product = await prismadb.product.create({
       data: {
         storeId: params.storeId,
@@ -179,6 +171,8 @@ export async function GET(
         bodyType: true,
         make: true,
         model: true,
+        region: true,
+        city: true,
       },
       orderBy: {
         createdAt: 'desc',

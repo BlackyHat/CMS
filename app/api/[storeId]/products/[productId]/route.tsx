@@ -22,6 +22,8 @@ export async function GET(
         bodyType: true,
         make: true,
         model: true,
+        region: true,
+        city: true,
       },
     });
 
@@ -84,7 +86,7 @@ export async function PATCH(
     if (!userId) {
       return new NextResponse('Unauthenticated', { status: 401 });
     }
-    if (userId !== ownerId || sessionClaims.role !== UserRoles.ADMIN) {
+    if (userId !== ownerId && sessionClaims.role !== UserRoles.ADMIN) {
       return new NextResponse('Forbidden', { status: 403 });
     }
 
@@ -199,20 +201,14 @@ export async function DELETE(
     if (!params.productId) {
       return new NextResponse('Product id is required', { status: 400 });
     }
-    const storeByUserId = await prismadb.store.findFirst({
-      where: { id: params.storeId, userId },
-    });
 
-    if (!storeByUserId) {
-      return new NextResponse('Unauthorized', { status: 403 });
-    }
     const product = await prismadb.product.findUnique({
       where: {
         id: params.productId,
       },
     });
 
-    if (userId !== product?.ownerId || sessionClaims.role !== UserRoles.ADMIN) {
+    if (userId !== product?.ownerId && sessionClaims.role !== UserRoles.ADMIN) {
       return new NextResponse('Forbidden', { status: 403 });
     }
     await prismadb.product.delete({
