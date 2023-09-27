@@ -430,7 +430,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
                         />
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent>
+                    <SelectContent className="overflow-y-auto h-64">
                       {choosedModels.length > 0 &&
                         choosedModels.map(({ id, label }) => (
                           <SelectItem key={id} value={id}>
@@ -495,7 +495,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
                         />
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent>
+                    <SelectContent className="overflow-y-auto h-64">
                       {choosedCity.length > 0 &&
                         choosedCity.map(({ id, name }) => (
                           <SelectItem key={id} value={id}>
@@ -519,7 +519,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
                     disabled={loading}
                     onValueChange={field.onChange}
                     value={String(field.value)}
-                    defaultValue={String(field.value)}
+                    // defaultValue={String(field.value)}
                   >
                     <FormControl>
                       <SelectTrigger>
@@ -1011,75 +1011,6 @@ const ProductForm: React.FC<ProductFormProps> = ({
                 </FormItem>
               )}
             />
-
-            <FormField
-              control={form.control}
-              name="engineSize"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Engine Size</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={loading}
-                      placeholder="Set an engine size"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="vinCode"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Vin Code</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={loading}
-                      placeholder="Vin-code"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="phone"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Phone</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={loading}
-                      placeholder="+38 (099) 123 45 67"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Car description</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder="Tell us a little bit about your car"
-                      className="resize-none"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
             <FormField
               control={form.control}
               name="headlights"
@@ -1172,6 +1103,74 @@ const ProductForm: React.FC<ProductFormProps> = ({
                       ))}
                     </SelectContent>
                   </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="engineSize"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Engine Size</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={loading}
+                      placeholder="Set an engine size"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="vinCode"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Vin Code</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={loading}
+                      placeholder="Vin-code"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="phone"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Phone</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={loading}
+                      placeholder="+38 (099) 123 45 67"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Car description</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Tell us a little bit about your car"
+                      className="resize-none"
+                      {...field}
+                    />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
