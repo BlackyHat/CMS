@@ -14,38 +14,28 @@ const ProductsNav = ({
   const routes = [
     {
       href: `/${params.storeId}/products`,
-      label: 'Overview',
+      label: 'Products overview',
       active: pathname === `/${params.storeId}/products`,
     },
     {
-      href: `/${params.storeId}/categories`,
-      label: 'Categories',
-      active: pathname === `/${params.storeId}/categories`,
-    },
-    {
-      href: `/${params.storeId}/billboards`,
-      label: 'Billboards',
-      active: pathname === `/${params.storeId}/billboards`,
-    },
-    {
-      href: `/${params.storeId}/bodyTypes`,
+      href: `/${params.storeId}/products/bodyTypes`,
       label: 'Body Types',
-      active: pathname === `/${params.storeId}/bodyTypes`,
+      active: pathname === `/${params.storeId}/products/bodyTypes`,
     },
     {
-      href: `/${params.storeId}/makes`,
+      href: `/${params.storeId}/products/makes`,
       label: 'Makes',
-      active: pathname === `/${params.storeId}/makes`,
+      active: pathname === `/${params.storeId}/products/makes`,
     },
     {
-      href: `/${params.storeId}/models`,
+      href: `/${params.storeId}/products/models`,
       label: 'Models',
-      active: pathname === `/${params.storeId}/models`,
+      active: pathname === `/${params.storeId}/products/models`,
     },
     {
-      href: `/${params.storeId}/colors`,
+      href: `/${params.storeId}/products/colors`,
       label: 'Colors',
-      active: pathname === `/${params.storeId}/colors`,
+      active: pathname === `/${params.storeId}/products/colors`,
     },
   ];
   return (
