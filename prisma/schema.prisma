@@ -141,9 +141,9 @@ model Product {
   cityId String
   city City @relation(fields: [cityId], references: [id])
 
-  engineSize String
-  vinCode String 
-  headlights Headlights 
+  engineSize String?
+  vinCode String?
+  headlights Headlights
   spareTire SpareTire
   interiorMatherial InteriorMatherial
   isCrashed Boolean @default(false)

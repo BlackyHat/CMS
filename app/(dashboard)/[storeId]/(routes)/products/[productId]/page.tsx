@@ -24,22 +24,26 @@ const ProductsPage = async ({
     where: {
       storeId: params.storeId,
     },
+    orderBy: { label: 'desc' },
   });
   const makes = await prismadb.make.findMany({
     where: {
       storeId: params.storeId,
     },
-    include: { models: true },
+    include: { models: { orderBy: { label: 'asc' } } },
     orderBy: { label: 'asc' },
   });
   const colors = await prismadb.color.findMany({
     where: {
       storeId: params.storeId,
     },
+    orderBy: { name: 'asc' },
   });
   const regions = await prismadb.region.findMany({
-    include: { cities: true },
-    orderBy: { name: 'asc' },
+    include: { cities: { orderBy: { name: 'asc' } } },
+    orderBy: {
+      updatedAt: 'asc',
+    },
   });
 
   return (

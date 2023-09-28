@@ -1,5 +1,6 @@
 'use client';
 
+import { formSchema } from '../validation/productSchema';
 import Heading from '@/components/heading';
 import { AlertModal } from '@/components/modals/alert-modal';
 import { Button } from '@/components/ui/button';
@@ -52,49 +53,6 @@ import * as z from 'zod';
 
 const currentYear = new Date().getFullYear();
 
-const formSchema = z.object({
-  name: z.string().min(1),
-  mileage: z.coerce.number().min(1),
-  year: z.coerce.number().min(1925).max(currentYear),
-  fuel: z.nativeEnum(FuelType),
-  gearbox: z.nativeEnum(GearboxType),
-  typeOfDrive: z.nativeEnum(TypeOfDriveOption),
-
-  regionId: z.string().min(1),
-  cityId: z.string().min(1),
-  description: z.string().min(1),
-  phone: z.string().min(1),
-
-  images: z.object({ url: z.string() }).array(),
-  price: z.coerce.number().min(1),
-  categoryId: z.string().min(1),
-  bodyTypeId: z.string().min(1),
-  makeId: z.string().min(1),
-  modelId: z.string().min(1),
-  colorId: z.string().min(1),
-  isFeatured: z.boolean().default(false).optional(),
-  isArchived: z.boolean().default(false).optional(),
-
-  engineSize: z.string().min(1).optional(),
-  vinCode: z.string().min(1).optional(),
-  headlights: z.nativeEnum(Headlights).optional(),
-  spareTire: z.nativeEnum(SpareTire).optional(),
-  interiorMatherial: z.nativeEnum(InteriorMatherial).optional(),
-
-  isCrashed: z.boolean().default(false).optional(),
-  airConditioner: z.boolean().default(false).optional(),
-  androidAuto: z.boolean().default(false).optional(),
-  heatedSteeringWheel: z.boolean().default(false).optional(),
-  electricWindows: z.boolean().default(false).optional(),
-  electricSideMirrors: z.boolean().default(false).optional(),
-  electricSeatAdjustment: z.boolean().default(false).optional(),
-  isofix: z.boolean().default(false).optional(),
-  navigationSystem: z.boolean().default(false).optional(),
-  seatVentilation: z.boolean().default(false).optional(),
-  seatHeating: z.boolean().default(false).optional(),
-  soundSystem: z.boolean().default(false).optional(),
-  sportSeats: z.boolean().default(false).optional(),
-});
 type ProductFormValues = z.infer<typeof formSchema>;
 
 interface ProductFormProps {
@@ -184,7 +142,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
   useEffect(() => {
     if (selectedMakeId) {
       const [choosedMake] = makes.filter(({ id }) => id === selectedMakeId);
-      setChoosedModels(choosedMake?.models);
+      setChoosedModels(choosedMake?.models.sort());
     }
   }, [selectedMakeId, makes]);
 
@@ -267,7 +225,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
             name="images"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Images</FormLabel>
+                <FormLabel>Images, add 2-3 photo</FormLabel>
                 <FormControl>
                   <ImageUpload
                     disabled={loading}
@@ -295,6 +253,11 @@ const ProductForm: React.FC<ProductFormProps> = ({
                 <FormMessage />
               </FormItem>
             )}
+          />
+          <Heading
+            title="Main information"
+            description="*the fields are mandatory"
+            className="text-xl"
           />
           <div className="grid grid-cols-3 gap-8">
             <FormField
@@ -445,6 +408,38 @@ const ProductForm: React.FC<ProductFormProps> = ({
             />
             <FormField
               control={form.control}
+              name="year"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Year</FormLabel>
+                  <Select
+                    disabled={loading}
+                    onValueChange={field.onChange}
+                    value={field.value ? String(field.value) : undefined}
+                    defaultValue={field.value ? String(field.value) : undefined}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue
+                          defaultValue={field.value}
+                          placeholder="Set a production year"
+                        />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent className="overflow-y-auto h-64">
+                      {years.map((year) => (
+                        <SelectItem key={year} value={String(year)}>
+                          {year}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
               name="regionId"
               render={({ field }) => (
                 <FormItem>
@@ -511,37 +506,22 @@ const ProductForm: React.FC<ProductFormProps> = ({
 
             <FormField
               control={form.control}
-              name="year"
+              name="mileage"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Year</FormLabel>
-                  <Select
-                    disabled={loading}
-                    onValueChange={field.onChange}
-                    value={String(field.value)}
-                    // defaultValue={String(field.value)}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue
-                          defaultValue={String(field.value)}
-                          placeholder="Set a production year"
-                        />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent className="overflow-y-auto h-64">
-                      {years.map((year) => (
-                        <SelectItem key={year} value={String(year)}>
-                          {year}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <FormLabel>Mileage</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      disabled={loading}
+                      placeholder="Set a millage"
+                      {...field}
+                    />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
               name="fuel"
@@ -564,8 +544,12 @@ const ProductForm: React.FC<ProductFormProps> = ({
                     </FormControl>
                     <SelectContent>
                       {Object.values(FuelType).map((type) => (
-                        <SelectItem key={type} value={type}>
-                          {type}
+                        <SelectItem
+                          key={type}
+                          value={type}
+                          className="capitalize"
+                        >
+                          {type.toLowerCase()}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -596,8 +580,12 @@ const ProductForm: React.FC<ProductFormProps> = ({
                     </FormControl>
                     <SelectContent>
                       {Object.values(GearboxType).map((type) => (
-                        <SelectItem key={type} value={type}>
-                          {type}
+                        <SelectItem
+                          key={type}
+                          value={type}
+                          className="capitalize"
+                        >
+                          {type.toLowerCase()}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -628,8 +616,12 @@ const ProductForm: React.FC<ProductFormProps> = ({
                     </FormControl>
                     <SelectContent>
                       {Object.values(TypeOfDriveOption).map((type) => (
-                        <SelectItem key={type} value={type}>
-                          {type}
+                        <SelectItem
+                          key={type}
+                          value={type}
+                          className="capitalize"
+                        >
+                          {type.toLowerCase()}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -672,33 +664,130 @@ const ProductForm: React.FC<ProductFormProps> = ({
             />
             <FormField
               control={form.control}
-              name="mileage"
+              name="headlights"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Mileage</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      disabled={loading}
-                      placeholder="Set a millage"
-                      {...field}
-                    />
-                  </FormControl>
+                  <FormLabel>Headlights</FormLabel>
+                  <Select
+                    disabled={loading}
+                    onValueChange={field.onChange}
+                    value={field.value}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue
+                          defaultValue={field.value}
+                          placeholder="Select a headlights"
+                        />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {Object.values(Headlights).map((type) => (
+                        <SelectItem
+                          key={type}
+                          value={type}
+                          className="capitalize"
+                        >
+                          {type.toLowerCase()}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
             />
             <FormField
               control={form.control}
-              name="price"
+              name="spareTire"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Price</FormLabel>
+                  <FormLabel>SpareTire</FormLabel>
+                  <Select
+                    disabled={loading}
+                    onValueChange={field.onChange}
+                    value={field.value}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue
+                          defaultValue={field.value}
+                          placeholder="Select a spare tire type"
+                        />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {Object.values(SpareTire).map((type) => (
+                        <SelectItem
+                          key={type}
+                          value={type}
+                          className="capitalize"
+                        >
+                          {type.toLowerCase()}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="interiorMatherial"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Interior Matherial</FormLabel>
+                  <Select
+                    disabled={loading}
+                    onValueChange={field.onChange}
+                    value={field.value}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue
+                          defaultValue={field.value}
+                          placeholder="Select a interior matherial"
+                        />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {Object.values(InteriorMatherial).map((type) => (
+                        <SelectItem
+                          key={type}
+                          value={type}
+                          className="capitalize"
+                        >
+                          {type.toLowerCase()}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <Separator />
+          <Heading
+            title="Description of the car"
+            description="Enter additional information about the car, operating conditions, general technical condition, etc"
+            className="text-xl"
+          />
+          <div className="grid grid-cols-3 gap-8">
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Car description</FormLabel>
                   <FormControl>
-                    <Input
-                      type="number"
-                      disabled={loading}
-                      placeholder="Set a price"
+                    <Textarea
+                      placeholder="Tell us a little bit about your car. Max 2000 symbols"
+                      className="resize-none"
                       {...field}
                     />
                   </FormControl>
@@ -707,12 +796,51 @@ const ProductForm: React.FC<ProductFormProps> = ({
               )}
             />
           </div>
+
           <Separator />
           <Heading
-            title="Additional data"
+            title="Additional info"
             description="Check some preset config of your car"
+            className="text-xl"
           />
           <div className="grid grid-cols-3 gap-8">
+            <FormField
+              control={form.control}
+              name="engineSize"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Engine Size</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={loading}
+                      placeholder="Set an engine size"
+                      onChange={field.onChange}
+                      value={field.value || undefined}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="vinCode"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Vin Code</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={loading}
+                      placeholder="Vin-code"
+                      onChange={field.onChange}
+                      value={field.value || undefined}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <FormField
               control={form.control}
               name="isFeatured"
@@ -1011,112 +1139,25 @@ const ProductForm: React.FC<ProductFormProps> = ({
                 </FormItem>
               )}
             />
+          </div>
+          <Separator />
+          <Heading
+            title="Cost of the car"
+            description="Enter the price of the car"
+            className="text-xl"
+          />
+          <div className="grid grid-cols-3 gap-8">
             <FormField
               control={form.control}
-              name="headlights"
+              name="price"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Headlights</FormLabel>
-                  <Select
-                    disabled={loading}
-                    onValueChange={field.onChange}
-                    value={field.value}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue
-                          defaultValue={field.value}
-                          placeholder="Select a headlights"
-                        />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {Object.values(Headlights).map((type) => (
-                        <SelectItem key={type} value={type}>
-                          {type}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="spareTire"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>SpareTire</FormLabel>
-                  <Select
-                    disabled={loading}
-                    onValueChange={field.onChange}
-                    value={field.value}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue
-                          defaultValue={field.value}
-                          placeholder="Select a spare tire type"
-                        />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {Object.values(SpareTire).map((type) => (
-                        <SelectItem key={type} value={type}>
-                          {type}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="interiorMatherial"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Interior Matherial</FormLabel>
-                  <Select
-                    disabled={loading}
-                    onValueChange={field.onChange}
-                    value={field.value}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue
-                          defaultValue={field.value}
-                          placeholder="Select a interior matherial"
-                        />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {Object.values(InteriorMatherial).map((type) => (
-                        <SelectItem key={type} value={type}>
-                          {type}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="engineSize"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Engine Size</FormLabel>
+                  <FormLabel>Price</FormLabel>
                   <FormControl>
                     <Input
+                      type="number"
                       disabled={loading}
-                      placeholder="Set an engine size"
+                      placeholder="Set a price"
                       {...field}
                     />
                   </FormControl>
@@ -1124,23 +1165,15 @@ const ProductForm: React.FC<ProductFormProps> = ({
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="vinCode"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Vin Code</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={loading}
-                      placeholder="Vin-code"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          </div>
+          <Separator />
+
+          <Heading
+            title="Contact information"
+            description="Enter contact information"
+            className="text-xl"
+          />
+          <div className="grid grid-cols-3 gap-8">
             <FormField
               control={form.control}
               name="phone"
@@ -1158,30 +1191,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Car description</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder="Tell us a little bit about your car"
-                      className="resize-none"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
           </div>
-          <Separator />
-          <Heading
-            title="Contact information"
-            description="Type contact information"
-          />
-          <div className="grid grid-cols-3 gap-8"></div>
           <Button
             disabled={loading}
             className="ml-auto"
