@@ -19,7 +19,7 @@ const ModelsClient: React.FC<ModelsClientProps> = ({ data }) => {
 
   return (
     <>
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-x-1">
         <Heading
           title={`Models (${data.length})`}
           description="Manage models for your store"

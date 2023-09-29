@@ -18,7 +18,7 @@ const BodyTypeClient: React.FC<BodyTypeClientProps> = ({ data }) => {
   const params = useParams();
   return (
     <>
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-x-1">
         <Heading
           title={`Body Types (${data.length})`}
           description="Manage body types for your store"

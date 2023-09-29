@@ -19,7 +19,7 @@ const MakesClient: React.FC<MakesClientProps> = ({ data }) => {
 
   return (
     <>
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-x-1">
         <Heading
           title={`Makes (${data.length})`}
           description="Manage makes for your store"
