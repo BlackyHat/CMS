@@ -1,3 +1,4 @@
+import MobileNav from './mobile-nav';
 import { ThemeToggle } from './theme-toggle';
 import MainNav from '@/components/main-nav';
 import StoreSwitcher from '@/components/store-switcher';
@@ -18,9 +19,17 @@ const Navbar = async () => {
 
   return (
     <div className="border-b">
-      <div className="flex h-16 items-center px-4 overflow-x-scroll">
+      <div className="flex h-16 items-center px-4">
         <StoreSwitcher items={stores} />
-        <MainNav className="mx-6 overflow-x-auto" />
+
+        <div className="hidden min-[640px]:inline-block">
+          <MainNav className="mx-6 overflow-x-auto" />
+        </div>
+
+        <div className="min-[639px]:hidden">
+          <MobileNav />
+        </div>
+
         <div className="ml-auto flex items-center space-x-4">
           <ThemeToggle />
           <UserButton afterSignOutUrl="/" />

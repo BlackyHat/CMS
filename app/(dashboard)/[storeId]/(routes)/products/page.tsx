@@ -1,6 +1,5 @@
 import ProductClient from './components/client';
 import { ProductColumn } from './components/columns';
-import ProductsNav from '@/components/product-nav';
 import prismadb from '@/lib/prismadb';
 import { format } from 'date-fns';
 

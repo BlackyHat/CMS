@@ -1,0 +1,85 @@
+'use client';
+
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet';
+import { cn } from '@/lib/utils';
+import { Menu } from 'lucide-react';
+import Link from 'next/link';
+import { useParams, usePathname } from 'next/navigation';
+
+const MobileNav = ({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLElement>) => {
+  const pathname = usePathname();
+  const params = useParams();
+
+  const routes = [
+    {
+      href: `/${params.storeId}`,
+      label: 'Overview',
+      active: pathname === `/${params.storeId}`,
+    },
+    {
+      href: `/${params.storeId}/billboards`,
+      label: 'Billboards',
+      active: pathname === `/${params.storeId}/billboards`,
+    },
+    {
+      href: `/${params.storeId}/categories`,
+      label: 'Categories',
+      active: pathname === `/${params.storeId}/categories`,
+    },
+    {
+      href: `/${params.storeId}/products`,
+      label: 'Products',
+      active: pathname === `/${params.storeId}/products`,
+    },
+    {
+      href: `/${params.storeId}/settings`,
+      label: 'Settings',
+      active: pathname === `/${params.storeId}/settings`,
+    },
+  ];
+  return (
+    <Sheet>
+      <SheetTrigger className="mx-4 p-4">
+        <Menu className="h-6 w-6" />
+      </SheetTrigger>
+      <SheetContent className="w-[200px]">
+        <SheetHeader className="mb-4 text-left">
+          <SheetTitle>Menu navigation</SheetTitle>
+          <SheetDescription className="text-[10px] text-muted-foreground">
+            Select options to view or edit.
+          </SheetDescription>
+        </SheetHeader>
+        <nav className="flex lg:space-x-6 mx-6 flex-col items-start space-x-0 gap-y-2">
+          {routes.map((route) => (
+            <SheetClose key={route.href} asChild>
+              <Link
+                href={route.href}
+                className={cn(
+                  'text-sm font-medium transition-colors hover:text-primary',
+                  route.active
+                    ? 'text-black dark:text-white'
+                    : 'text-muted-foreground'
+                )}
+              >
+                {route.label}
+              </Link>
+            </SheetClose>
+          ))}
+        </nav>
+      </SheetContent>
+    </Sheet>
+  );
+};
+
+export default MobileNav;
