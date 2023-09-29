@@ -86,7 +86,7 @@ model Make {
 
 model Model {
   id String @id @default(uuid())
-  label String @unique
+  label String
   products Product[]
   makeId String
   make Make @relation("MakeToModel",fields: [makeId], references: [id])

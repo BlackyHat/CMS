@@ -256,7 +256,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
           />
           <Heading
             title="Main information"
-            description="*the fields are mandatory"
+            description="*The fields are mandatory"
             className="text-xl"
           />
           <div className="grid grid-cols-3 gap-8">
@@ -393,7 +393,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
                         />
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent className="overflow-y-auto h-64">
+                    <SelectContent className="overflow-y-auto max-h-64">
                       {choosedModels.length > 0 &&
                         choosedModels.map(({ id, label }) => (
                           <SelectItem key={id} value={id}>
@@ -509,12 +509,12 @@ const ProductForm: React.FC<ProductFormProps> = ({
               name="mileage"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Mileage</FormLabel>
+                  <FormLabel>Kilometer</FormLabel>
                   <FormControl>
                     <Input
                       type="number"
                       disabled={loading}
-                      placeholder="Set a millage"
+                      placeholder="Set a kilometers"
                       {...field}
                     />
                   </FormControl>

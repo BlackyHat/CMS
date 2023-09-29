@@ -1,5 +1,5 @@
 // import { cars } from './cars';
-// import { cities } from './cities';
+// // import { cities } from './cities';
 // import { PrismaClient } from '@prisma/client';
 
 // const prisma = new PrismaClient();
@@ -26,16 +26,16 @@
 //     }
 //   }
 // }
-// async function main() {
-//   for (let city of cities) {
-//     await prisma.city.create({
-//       data: {
-//         name: city.name,
-//         regionId: '022f5979-302b-4f23-a0b2-7977b1046b9f',
-//       },
-//     });
-//   }
-// }
+// // async function main() {
+// //   for (let city of cities) {
+// //     await prisma.city.create({
+// //       data: {
+// //         name: city.name,
+// //         regionId: '022f5979-302b-4f23-a0b2-7977b1046b9f',
+// //       },
+// //     });
+// //   }
+// // }
 
 // main()
 //   .catch((e) => {
