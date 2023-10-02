@@ -1,4 +1,5 @@
 import prismadb from '@/lib/prismadb';
+import { UserRoles } from '@/types/enums';
 import { auth } from '@clerk/nextjs';
 import { NextResponse } from 'next/server';
 

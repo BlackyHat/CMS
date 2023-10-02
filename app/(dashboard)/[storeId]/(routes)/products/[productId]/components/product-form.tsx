@@ -49,6 +49,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
+import { PatternFormat, NumericFormat } from 'react-number-format';
 import * as z from 'zod';
 
 const currentYear = new Date().getFullYear();
@@ -259,7 +260,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
             description="*The fields are mandatory"
             className="text-xl"
           />
-          <div className="grid grid-cols-3 gap-8">
+          <div className="grid xl:grid-cols-3 sm:grid-cols-2 gap-8">
             <FormField
               control={form.control}
               name="name"
@@ -509,13 +510,20 @@ const ProductForm: React.FC<ProductFormProps> = ({
               name="mileage"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Kilometer</FormLabel>
+                  <FormLabel>Kilometers</FormLabel>
                   <FormControl>
-                    <Input
-                      type="number"
+                    <NumericFormat
+                      thousandSeparator={true}
+                      allowNegative={false}
+                      decimalScale={0}
+                      suffix={' ths km.'}
+                      fixedDecimalScale={true}
+                      valueIsNumericString={true}
                       disabled={loading}
                       placeholder="Set a kilometers"
-                      {...field}
+                      customInput={Input}
+                      value={field.value}
+                      onValueChange={(values) => field.onChange(values.value)}
                     />
                   </FormControl>
                   <FormMessage />
@@ -777,7 +785,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
             description="Enter additional information about the car, operating conditions, general technical condition, etc"
             className="text-xl"
           />
-          <div className="grid grid-cols-3 gap-8">
+          <div className="max-w-4xl mr-auto">
             <FormField
               control={form.control}
               name="description"
@@ -787,7 +795,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
                   <FormControl>
                     <Textarea
                       placeholder="Tell us a little bit about your car. Max 2000 symbols"
-                      className="resize-none"
+                      className="resize-none h-[240px]"
                       {...field}
                     />
                   </FormControl>
@@ -803,7 +811,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
             description="Check some preset config of your car"
             className="text-xl"
           />
-          <div className="grid grid-cols-3 gap-8">
+          <div className="grid xl:grid-cols-3 sm:grid-cols-2 gap-8">
             <FormField
               control={form.control}
               name="engineSize"
@@ -833,7 +841,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
                       disabled={loading}
                       placeholder="Vin-code"
                       onChange={field.onChange}
-                      value={field.value || undefined}
+                      value={field.value || ''}
                     />
                   </FormControl>
                   <FormMessage />
@@ -1146,7 +1154,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
             description="Enter the price of the car"
             className="text-xl"
           />
-          <div className="grid grid-cols-3 gap-8">
+          <div className="grid xl:grid-cols-3 sm:grid-cols-2 gap-8">
             <FormField
               control={form.control}
               name="price"
@@ -1154,11 +1162,18 @@ const ProductForm: React.FC<ProductFormProps> = ({
                 <FormItem>
                   <FormLabel>Price</FormLabel>
                   <FormControl>
-                    <Input
-                      type="number"
+                    <NumericFormat
+                      thousandSeparator={true}
+                      allowNegative={false}
+                      decimalScale={0}
+                      suffix={' $'}
+                      fixedDecimalScale={true}
+                      valueIsNumericString={true}
                       disabled={loading}
                       placeholder="Set a price"
-                      {...field}
+                      customInput={Input}
+                      value={field.value}
+                      onValueChange={(values) => field.onChange(values.value)}
                     />
                   </FormControl>
                   <FormMessage />
@@ -1173,7 +1188,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
             description="Enter contact information"
             className="text-xl"
           />
-          <div className="grid grid-cols-3 gap-8">
+          <div className="grid xl:grid-cols-3 sm:grid-cols-2 gap-8">
             <FormField
               control={form.control}
               name="phone"
@@ -1181,10 +1196,16 @@ const ProductForm: React.FC<ProductFormProps> = ({
                 <FormItem>
                   <FormLabel>Phone</FormLabel>
                   <FormControl>
-                    <Input
+                    <PatternFormat
+                      format="+38 (###) ###-##-##"
                       disabled={loading}
                       placeholder="+38 (099) 123 45 67"
-                      {...field}
+                      mask="_"
+                      customInput={Input}
+                      value={field.value}
+                      onValueChange={(values) =>
+                        field.onChange(values.formattedValue)
+                      }
                     />
                   </FormControl>
                   <FormMessage />
