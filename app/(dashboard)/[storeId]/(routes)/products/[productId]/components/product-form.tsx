@@ -823,6 +823,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
                       disabled={loading}
                       placeholder="Set an engine size"
                       onChange={field.onChange}
+                      onRemove={() => field.onChange('')}
                       value={field.value || undefined}
                     />
                   </FormControl>
@@ -841,6 +842,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
                       disabled={loading}
                       placeholder="Vin-code"
                       onChange={field.onChange}
+                      onRemove={() => field.onChange('')}
                       value={field.value || ''}
                     />
                   </FormControl>

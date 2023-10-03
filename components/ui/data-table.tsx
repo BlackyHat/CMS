@@ -51,6 +51,7 @@ export function DataTable<TData, TValue>({
         <Input
           placeholder="Search"
           value={(table.getColumn(searchKey)?.getFilterValue() as string) ?? ''}
+          onRemove={() => setColumnFilters([])}
           onChange={(event) =>
             table.getColumn(searchKey)?.setFilterValue(event.target.value)
           }
