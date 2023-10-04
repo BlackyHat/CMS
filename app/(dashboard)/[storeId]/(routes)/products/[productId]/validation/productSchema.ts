@@ -7,7 +7,6 @@ import {
   SpareTire,
   TypeOfDriveOption,
 } from '@prisma/client';
-import { PatternFormat, NumericFormat } from 'react-number-format';
 import { z } from 'zod';
 
 export const formSchema = z.object({
@@ -25,15 +24,12 @@ export const formSchema = z.object({
   regionId: z.string().min(1),
   cityId: z.string().min(1),
   description: z.string().min(1).max(2000),
-  phone: z
-    .string()
-    .refine((phone) => phonePattern.test(phone), {
-      message: 'Invalid phone number format. Example: "+38 (099) 123-45-67"',
-    })
-    .optional(),
+  phone: z.string().refine((phone) => phonePattern.test(phone), {
+    message: 'Invalid phone number format. Example: "+38 (099) 123-45-67"',
+  }),
 
   images: z.object({ url: z.string() }).array(),
-  price: z.coerce.number().min(1).max(10000000).optional(),
+  price: z.coerce.number().min(1).max(10000000),
   categoryId: z.string().min(1),
   bodyTypeId: z.string().min(1),
   makeId: z.string().min(1),
