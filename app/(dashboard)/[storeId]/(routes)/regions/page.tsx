@@ -9,11 +9,10 @@ const RegionsPage = async () => {
   });
 
   const formattedRegions: RegionColumn[] = regions.map(
-    ({ id, name, createdAt, updatedAt }) => ({
+    ({ id, name, createdAt }) => ({
       id,
       name,
       createdAt: format(createdAt, 'MMMM do, yyyy'),
-      updatedAt: format(updatedAt, 'MMMM do, yyyy'),
     })
   );
   return (

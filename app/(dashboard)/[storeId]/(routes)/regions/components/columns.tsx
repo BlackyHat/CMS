@@ -7,7 +7,6 @@ export type RegionColumn = {
   id: string;
   name: string;
   createdAt: string;
-  updatedAt: string;
 };
 
 export const columns: ColumnDef<RegionColumn>[] = [
@@ -15,10 +14,7 @@ export const columns: ColumnDef<RegionColumn>[] = [
     accessorKey: 'name',
     header: 'Name',
   },
-  {
-    accessorKey: 'createdAt',
-    header: 'Date',
-  },
+
   {
     accessorKey: 'updatedAt',
     header: 'Date',

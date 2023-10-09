@@ -34,13 +34,8 @@ const MainNav = ({
     },
     {
       href: `/${params.storeId}/regions`,
-      label: 'Products',
+      label: 'Regions',
       active: pathname === `/${params.storeId}/regions`,
-    },
-    {
-      href: `/${params.storeId}/products`,
-      label: 'Products',
-      active: pathname === `/${params.storeId}/products`,
     },
     {
       href: `/${params.storeId}/settings`,
@@ -49,7 +44,12 @@ const MainNav = ({
     },
   ];
   return (
-    <nav className={cn('flex items-center space-x-4 lg:space-x-6', className)}>
+    <nav
+      className={cn(
+        'flex items-center gap-x-4 gap-y-2 lg:space-x-6 flex-wrap',
+        className
+      )}
+    >
       {routes.map((route) => (
         <Link
           key={route.href}

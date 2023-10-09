@@ -43,6 +43,11 @@ const MobileNav = ({
       active: pathname === `/${params.storeId}/products`,
     },
     {
+      href: `/${params.storeId}/regions`,
+      label: 'Regions',
+      active: pathname === `/${params.storeId}/regions`,
+    },
+    {
       href: `/${params.storeId}/settings`,
       label: 'Settings',
       active: pathname === `/${params.storeId}/settings`,
