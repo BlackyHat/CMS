@@ -18,8 +18,8 @@ const Navbar = async () => {
   });
 
   return (
-    <div className="border-b">
-      <div className="flex h-16 items-center px-4">
+    <div className="border-b ">
+      <div className="flex h-16 items-center px-4 max-w-screen-2xl m-auto">
         <StoreSwitcher items={stores} />
 
         <div className="hidden min-[640px]:inline-block">

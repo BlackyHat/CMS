@@ -8,7 +8,7 @@ export default async function RegionLayout({
 }) {
   return (
     <>
-      <div className="flex h-16 items-center px-4">
+      <div className="flex h-16 items-center px-4 max-w-screen-2xl m-auto">
         <RegionsNav />
       </div>
       {children}

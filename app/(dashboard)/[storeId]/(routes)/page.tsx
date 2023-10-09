@@ -18,7 +18,7 @@ const DashboardPage: React.FC<DashboardPageProps> = async ({ params }) => {
   const productsFeaturedCounts = await getFeaturedProductsCount(params.storeId);
   const productsArchivedCounts = await getArchivedProductsCount(params.storeId);
   return (
-    <div className="flex-col">
+    <div className="max-w-screen-2xl m-auto">
       <div className="flex-1 space-y-4 p-8 pt-6">
         <Heading title="Dashboard" description="Overview of your store" />
         <Separator />

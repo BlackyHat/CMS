@@ -47,7 +47,7 @@ const ProductsPage = async ({
   });
 
   return (
-    <div className="flex-col">
+    <div className="max-w-screen-2xl m-auto">
       <div className="flex-1 space-y-4 p-8 pt-0">
         <ProductForm
           initialData={product}

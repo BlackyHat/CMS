@@ -9,7 +9,7 @@ export default async function ProductLayout({
 }) {
   return (
     <>
-      <div className="hidden min-[640px]:flex h-16 items-center px-4">
+      <div className="hidden min-[640px]:flex h-16 items-center px-4 max-w-screen-2xl m-auto">
         <ProductsNav className="mx-6" />
       </div>
 

@@ -82,3 +82,91 @@ body,
     @apply bg-background text-foreground;
   }
 }
+
+.cl-userButtonPopoverCard,
+.cl-card,
+.cl-userButton-popover,
+.cl-navbar {
+  background-color: hsl(var(--popover));
+  border-color: hsl(var(--input));
+  color: hsl(var(--foreground));
+}
+
+.cl-userPreviewSecondaryIdentifier,
+.cl-userButtonPopoverActionButtonText,
+.cl-userButtonPopoverActionButtonIconBox,
+.cl-userButtonPopoverActionButtonIcon,
+.cl-userButtonPopoverActionButtonIcon__manageAccount,
+.cl-headerSubtitle,
+.cl-profileSectionTitle,
+.cl-profileSectionPrimaryButton,
+.cl-profileSectionPrimaryButton__password,
+.cl-navbarButton,
+.cl-navbarButton__account,
+.cl-accordionTriggerButton,
+.cl-accordionContent,
+.cl-profileSectionContent.cl-profileSectionContent__activeDevices,
+.cl-profileSectionContent.cl-profileSectionContent__danger,
+.cl-dividerText,
+.cl-footerActionText,
+.cl-formFieldInputShowPasswordIcon {
+  color: hsl(var(--muted-foreground));
+}
+.cl-dividerLine {
+  background-color: hsl(var(--muted-foreground));
+}
+
+.cl-navbarButton.cl-navbarButton__account.cl-active,
+.cl-formFieldLabel,
+.cl-footerActionLink,
+.cl-footerActionLink:hover {
+  color: hsl(var(--foreground));
+}
+
+.cl-navbarMobileMenuButton,
+.cl-headerTitle,
+.cl-profileSectionTitleText,
+.cl-badge {
+  color: hsl(var(--foreground));
+}
+
+.cl-userButtonPopoverFooter,
+.cl-internal {
+  display: none;
+}
+
+.cl-card.cl-card > :last-child {
+  display: none;
+}
+
+.cl-profileSectionTitle {
+  border-bottom: 1px solid hsl(var(--muted-foreground));
+}
+
+.cl-formButtonPrimary {
+  /* color: hsl(var(--foreground)); */
+  background-color: hsl(var(--destructive));
+}
+.cl-formButtonPrimary:hover,
+.cl-formButtonPrimary:focus {
+  /* color: hsl(var(--foreground)); */
+  background-color: hsl(var(--destructive));
+}
+
+.cl-profileSectionContent.cl-profileSectionContent__activeDevices p,
+.cl-profileSectionContent.cl-profileSectionContent__danger p {
+  color: hsl(var(--muted-foreground));
+}
+.cl-profileSectionContent.cl-profileSectionContent__activeDevices span + p,
+.cl-profileSectionContent.cl-profileSectionContent__danger span + p {
+  color: hsl(var(--foreground));
+}
+
+.cl-socialButtonsIconButton {
+  border: 1px solid hsl(var(--muted-foreground));
+  transition: background-color ease-out 350ms;
+}
+
+.cl-socialButtonsIconButton:hover {
+  background-color: hsl(var(--muted-foreground));
+}
