@@ -1,4 +1,4 @@
-import ProductNav from '@/components/product-mobile-nav ';
+import ProductsMobileNav from '@/components/product-mobile-nav ';
 import ProductsNav from '@/components/product-nav';
 import React from 'react';
 
@@ -9,12 +9,12 @@ export default async function ProductLayout({
 }) {
   return (
     <>
-      <div className="hidden min-[640px]:inline-block  min-[640px]:flex h-16 items-center px-4">
+      <div className="hidden min-[640px]:flex h-16 items-center px-4">
         <ProductsNav className="mx-6" />
       </div>
 
       <div className="min-[639px]:hidden">
-        <ProductNav />
+        <ProductsMobileNav />
       </div>
       {children}
     </>

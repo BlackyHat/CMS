@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { useParams, usePathname } from 'next/navigation';
 
-const MainNav = ({
+const RegionsNav = ({
   className,
   ...props
 }: React.HTMLAttributes<HTMLElement>) => {
@@ -13,39 +13,14 @@ const MainNav = ({
 
   const routes = [
     {
-      href: `/${params.storeId}`,
-      label: 'Overview',
-      active: pathname === `/${params.storeId}`,
-    },
-    {
-      href: `/${params.storeId}/billboards`,
-      label: 'Billboards',
-      active: pathname === `/${params.storeId}/billboards`,
-    },
-    {
-      href: `/${params.storeId}/categories`,
-      label: 'Categories',
-      active: pathname === `/${params.storeId}/categories`,
-    },
-    {
-      href: `/${params.storeId}/products`,
-      label: 'Products',
-      active: pathname === `/${params.storeId}/products`,
-    },
-    {
       href: `/${params.storeId}/regions`,
-      label: 'Products',
+      label: 'Regions Overview',
       active: pathname === `/${params.storeId}/regions`,
     },
     {
-      href: `/${params.storeId}/products`,
-      label: 'Products',
-      active: pathname === `/${params.storeId}/products`,
-    },
-    {
-      href: `/${params.storeId}/settings`,
-      label: 'Settings',
-      active: pathname === `/${params.storeId}/settings`,
+      href: `/${params.storeId}/regions/cities`,
+      label: 'Cities',
+      active: pathname === `/${params.storeId}/regions/cities`,
     },
   ];
   return (
@@ -68,4 +43,4 @@ const MainNav = ({
   );
 };
 
-export default MainNav;
+export default RegionsNav;

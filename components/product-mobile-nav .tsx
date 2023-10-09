@@ -14,7 +14,7 @@ import { Menu, SlidersHorizontal } from 'lucide-react';
 import Link from 'next/link';
 import { useParams, usePathname } from 'next/navigation';
 
-const ProductNav = ({
+const ProductsMobileNav = ({
   className,
   ...props
 }: React.HTMLAttributes<HTMLElement>) => {
@@ -82,4 +82,4 @@ const ProductNav = ({
   );
 };
 
-export default ProductNav;
+export default ProductsMobileNav;

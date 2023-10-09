@@ -26,7 +26,7 @@ const Navbar = async () => {
           <MainNav className="mx-6 overflow-x-auto" />
         </div>
 
-        <div className="min-[639px]:hidden">
+        <div className="min-[640px]:hidden">
           <MobileNav />
         </div>
 
