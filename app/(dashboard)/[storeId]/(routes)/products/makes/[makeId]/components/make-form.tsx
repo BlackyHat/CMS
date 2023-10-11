@@ -126,8 +126,7 @@ const MakeForm: React.FC<MakeFormProps> = ({ initialData }) => {
                     <Input
                       disabled={loading}
                       placeholder="Make label"
-                                          onRemove={() => field.onChange('')}
-
+                      onRemove={() => field.onChange('')}
                       {...field}
                     />
                   </FormControl>

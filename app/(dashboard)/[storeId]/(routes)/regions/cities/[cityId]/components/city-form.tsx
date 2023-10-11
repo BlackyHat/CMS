@@ -184,8 +184,8 @@ const CityForm: React.FC<CityFormProps> = ({ initialData, regions }) => {
                       align="start"
                     >
                       <Command>
-                        <CommandInput placeholder="Search make..." />
-                        <CommandEmpty>No make found.</CommandEmpty>
+                        <CommandInput placeholder="Search region..." />
+                        <CommandEmpty>No region found.</CommandEmpty>
                         <CommandGroup>
                           {regions.map(({ name, id }) => (
                             <CommandItem

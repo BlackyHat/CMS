@@ -9,7 +9,11 @@ const SelectedItems: React.FC<SelectedItemsProps> = ({ options }) => {
   return options.map((option) => {
     if (typeof option === 'string') {
       return (
-        <SelectItem key={option} value={option} className="capitalize">
+        <SelectItem
+          key={option}
+          value={option.toUpperCase()}
+          className="capitalize"
+        >
           {option.toLowerCase()}
         </SelectItem>
       );

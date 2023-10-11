@@ -106,6 +106,7 @@ const FormMainInfo: React.FC<ProductFormProps> = ({
                   disabled={loading}
                   onRemove={() => field.onChange('')}
                   {...register('name')}
+                  {...field}
                 />
               </FormControl>
               <FormMessage />

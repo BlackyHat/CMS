@@ -9,7 +9,6 @@ import {
 import {
   Select,
   SelectContent,
-  SelectItem,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
@@ -54,11 +53,10 @@ const FormProductSelect: React.FC<FormProductSelectProps> = ({
                 <SelectValue
                   defaultValue={field.value}
                   placeholder={`Select a ${label}`}
-                  className="capitalize"
                 />
               </SelectTrigger>
             </FormControl>
-            <SelectContent>
+            <SelectContent className="overflow-y-auto max-h-64">
               <SelectedItems options={fieldOptions} />
             </SelectContent>
           </Select>

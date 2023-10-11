@@ -40,8 +40,8 @@ const RegionForm: React.FC<RegionFormProps> = ({ initialData }) => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const title = initialData ? 'Edit regions' : 'Create regions';
-  const description = initialData ? 'Edit a regions' : 'Add a regions';
+  const title = initialData ? 'Edit region' : 'Create region';
+  const description = initialData ? 'Edit a region' : 'Add a new region';
   const toastMessage = initialData ? 'Region updated.' : 'Region created.';
   const action = initialData ? 'Save changes' : 'Create';
 
@@ -82,7 +82,7 @@ const RegionForm: React.FC<RegionFormProps> = ({ initialData }) => {
       toast.success('Region deleted.');
     } catch (error) {
       toast.error(
-        'Make sure you removed all products using this Region first.'
+        'Make sure you removed all products using this region first.'
       );
     } finally {
       setLoading(false);

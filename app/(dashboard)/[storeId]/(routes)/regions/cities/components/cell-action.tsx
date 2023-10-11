@@ -1,6 +1,6 @@
 'use client';
 
-import { RegionColumn } from './columns';
+import { CityColumn } from './columns';
 import { AlertModal } from '@/components/modals/alert-modal';
 import { Button } from '@/components/ui/button';
 import {
@@ -17,7 +17,7 @@ import { useState } from 'react';
 import { toast } from 'react-hot-toast';
 
 interface CellActionProps {
-  data: RegionColumn;
+  data: CityColumn;
 }
 
 const CellAction: React.FC<CellActionProps> = ({ data }) => {
@@ -28,17 +28,17 @@ const CellAction: React.FC<CellActionProps> = ({ data }) => {
 
   const onCopy = (id: string) => {
     navigator.clipboard.writeText(id);
-    toast.success('Region Id copied to the clipboard.');
+    toast.success('City Id copied to the clipboard.');
   };
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/${params.storeId}/regions/${data.id}`);
+      await axios.delete(`/api/${params.storeId}/regions/cities/${data.id}`);
       router.refresh();
-      toast.success('Region deleted.');
+      toast.success('City deleted.');
     } catch (error) {
       toast.error(
-        'Make sure you removed all products using this region first.'
+        'Make sure you removed all products and regions using this city first.'
       );
     } finally {
       setLoading(false);
@@ -66,7 +66,9 @@ const CellAction: React.FC<CellActionProps> = ({ data }) => {
             <Copy className="mr-2 h-4 w-4" /> Copy Id
           </DropdownMenuItem>
           <DropdownMenuItem
-            onClick={() => router.push(`/${params.storeId}/regions/${data.id}`)}
+            onClick={() =>
+              router.push(`/${params.storeId}/regions/cities/${data.id}`)
+            }
           >
             <Edit className="mr-2 h-4 w-4" /> Update
           </DropdownMenuItem>

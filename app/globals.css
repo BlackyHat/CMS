@@ -92,6 +92,10 @@ body,
   color: hsl(var(--foreground));
 }
 
+.cl-card {
+  overflow: hidden;
+}
+
 .cl-userPreviewSecondaryIdentifier,
 .cl-userButtonPopoverActionButtonText,
 .cl-userButtonPopoverActionButtonIconBox,
@@ -105,15 +109,22 @@ body,
 .cl-navbarButton__account,
 .cl-accordionTriggerButton,
 .cl-accordionContent,
+.cl-accordionContent p,
 .cl-profileSectionContent.cl-profileSectionContent__activeDevices,
 .cl-profileSectionContent.cl-profileSectionContent__danger,
 .cl-dividerText,
 .cl-footerActionText,
-.cl-formFieldInputShowPasswordIcon {
+.cl-formFieldInputShowPasswordIcon,
+.cl-breadcrumbsItemBox p,
+.cl-breadcrumbsItemBox a,
+.cl-form p,
+.cl-page span,
+.cl-page p {
   color: hsl(var(--muted-foreground));
 }
-.cl-dividerLine {
-  background-color: hsl(var(--muted-foreground));
+.cl-dividerLine,
+.cl-formFieldInput {
+  background-color: hsl(var(--muted-foreground) / 0.9);
 }
 
 .cl-navbarButton.cl-navbarButton__account.cl-active,
@@ -125,32 +136,71 @@ body,
 
 .cl-navbarMobileMenuButton,
 .cl-headerTitle,
+.cl-headerTitle p,
+.cl-headerTitle span,
 .cl-profileSectionTitleText,
 .cl-badge {
   color: hsl(var(--foreground));
 }
 
 .cl-userButtonPopoverFooter,
-.cl-internal {
-  display: none;
-}
-
+.cl-internal,
 .cl-card.cl-card > :last-child {
-  display: none;
+  opacity: 0;
 }
 
 .cl-profileSectionTitle {
   border-bottom: 1px solid hsl(var(--muted-foreground));
 }
 
+button.cl-modalBackdrop {
+  transition-property: color, background-color;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+.cl-modalCloseButton {
+  color: hsl(var(--primary));
+}
+.cl-modalCloseButton:hover,
+.cl-modalCloseButton:focus {
+  color: hsl(var(--primary) / 0.9);
+}
+
+.cl-userButtonPopoverActions button:hover,
+.cl-userButtonPopoverActions button:focus,
+.cl-page button:hover,
+.cl-page button:focus {
+  background-color: hsl(var(--muted) / 0.5);
+}
+
 .cl-formButtonPrimary {
-  /* color: hsl(var(--foreground)); */
-  background-color: hsl(var(--destructive));
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
 }
 .cl-formButtonPrimary:hover,
 .cl-formButtonPrimary:focus {
-  /* color: hsl(var(--foreground)); */
+  background-color: hsl(var(--primary) / 0.9);
+  color: hsl(var(--primary-foreground) / 0.9);
+}
+.cl-avatarImageActionsRemove {
+  color: hsl(var(--destructive));
+}
+.cl-avatarImageActionsUpload {
+  color: hsl(var(--primary));
+}
+
+button.cl-formButtonReset,
+button[data-localization-key='userProfile.formButtonReset'] {
   background-color: hsl(var(--destructive));
+  color: hsl(var(--foreground));
+}
+button:hover.cl-formButtonReset,
+button:focus.cl-formButtonReset,
+button[data-localization-key='userProfile.formButtonReset']:hover,
+button[data-localization-key='userProfile.formButtonReset']:focus {
+  background-color: hsl(var(--destructive) / 0.9);
+  color: hsl(var(--foreground));
 }
 
 .cl-profileSectionContent.cl-profileSectionContent__activeDevices p,

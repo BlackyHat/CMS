@@ -16,7 +16,7 @@ export const columns: ColumnDef<RegionColumn>[] = [
   },
 
   {
-    accessorKey: 'updatedAt',
+    accessorKey: 'createdAt',
     header: 'Date',
   },
   {
