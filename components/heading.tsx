@@ -4,9 +4,15 @@ interface HeadingProps {
   title: string;
   description: string;
   className?: string;
+  descClassName?: string;
 }
 
-const Heading: React.FC<HeadingProps> = ({ title, description, className }) => {
+const Heading: React.FC<HeadingProps> = ({
+  title,
+  description,
+  className,
+  descClassName,
+}) => {
   return (
     <div>
       <h2
@@ -17,7 +23,12 @@ const Heading: React.FC<HeadingProps> = ({ title, description, className }) => {
       >
         {title}
       </h2>
-      <p className="text-xs sm:text-small text-muted-foreground">
+      <p
+        className={cn(
+          'text-xs sm:text-small text-muted-foreground',
+          descClassName
+        )}
+      >
         {description}
       </p>
     </div>

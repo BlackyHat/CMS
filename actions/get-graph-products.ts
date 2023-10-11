@@ -14,10 +14,6 @@ export const getGraphProductsCreated = async (storeId: string) => {
   const mounthlyProduct: { [key: number]: number } = {};
   for (const product of products) {
     const month = product.createdAt.getMonth();
-    // let productCounts = 0;
-    // for (const item of order.orderItems) {
-    //   productCounts += item.product.price.toNumber();
-    // }
 
     mounthlyProduct[month] = (mounthlyProduct[month] || 0) + 1;
   }

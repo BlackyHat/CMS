@@ -37,7 +37,13 @@ const CellAction: React.FC<CellActionProps> = ({ data }) => {
       router.refresh();
       toast.success('Make deleted.');
     } catch (error) {
-      toast.error('Make sure  you removed all products using this make first.');
+      const errorMessage =
+        'Make sure you removed all products using this Make first.';
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.statusText || errorMessage);
+      } else {
+        toast.error(errorMessage);
+      }
     } finally {
       setLoading(false);
       setOpen(false);
@@ -64,7 +70,9 @@ const CellAction: React.FC<CellActionProps> = ({ data }) => {
             <Copy className="mr-2 h-4 w-4" /> Copy Id
           </DropdownMenuItem>
           <DropdownMenuItem
-            onClick={() => router.push(`/${params.storeId}/products/makes/${data.id}`)}
+            onClick={() =>
+              router.push(`/${params.storeId}/products/makes/${data.id}`)
+            }
           >
             <Edit className="mr-2 h-4 w-4" /> Update
           </DropdownMenuItem>

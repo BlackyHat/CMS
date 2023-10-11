@@ -59,7 +59,9 @@ const ModelForm: React.FC<ModelFormProps> = ({ initialData, makes }) => {
   const [loading, setLoading] = useState(false);
 
   const title = initialData ? 'Edit model' : 'Create model';
-  const description = initialData ? 'Edit a model' : 'Add a model';
+  const description = (initialData ? 'Edit a model' : 'Add a model').concat(
+    ' *Only for users with admin rights.'
+  );
   const toastMessage = initialData ? 'Model updated.' : 'Model created.';
   const action = initialData ? 'Save changes' : 'Create';
 
@@ -83,7 +85,12 @@ const ModelForm: React.FC<ModelFormProps> = ({ initialData, makes }) => {
       router.push(`/${params.storeId}/products/models`);
       toast.success(toastMessage);
     } catch (error) {
-      toast.error('Something went wrong.');
+      const errorMessage = 'Something went wrong.';
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.statusText || errorMessage);
+      } else {
+        toast.error(errorMessage);
+      }
     } finally {
       setLoading(false);
     }
@@ -99,7 +106,13 @@ const ModelForm: React.FC<ModelFormProps> = ({ initialData, makes }) => {
       router.push(`/${params.storeId}/products/models`);
       toast.success('Model deleted.');
     } catch (error) {
-      toast.error('Make sure you removed all makes using this model first.');
+      const errorMessage =
+        'Make sure you removed all makes using this model first.';
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.statusText || errorMessage);
+      } else {
+        toast.error(errorMessage);
+      }
     } finally {
       setLoading(false);
       setOpen(false);
@@ -115,7 +128,11 @@ const ModelForm: React.FC<ModelFormProps> = ({ initialData, makes }) => {
         loading={loading}
       />
       <div className="flex items-center justify-between">
-        <Heading title={title} description={description} />
+        <Heading
+          title={title}
+          description={description}
+          descClassName="text-red-600"
+        />
         {initialData && (
           <Button
             disabled={loading}
@@ -144,8 +161,7 @@ const ModelForm: React.FC<ModelFormProps> = ({ initialData, makes }) => {
                     <Input
                       disabled={loading}
                       placeholder="Model label"
-                                          onRemove={() => field.onChange('')}
-
+                      onRemove={() => field.onChange('')}
                       {...field}
                     />
                   </FormControl>

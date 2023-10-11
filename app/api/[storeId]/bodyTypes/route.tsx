@@ -1,4 +1,5 @@
 import prismadb from '@/lib/prismadb';
+import { UserRoles } from '@/types/enums';
 import { auth } from '@clerk/nextjs';
 import { NextResponse } from 'next/server';
 
@@ -7,7 +8,7 @@ export async function POST(
   { params }: { params: { storeId: string } }
 ) {
   try {
-    const { userId } = auth();
+    const { userId, sessionClaims } = auth();
     const body = await req.json();
 
     const { label, imageUrl } = body;
@@ -15,6 +16,12 @@ export async function POST(
     if (!userId) {
       return new NextResponse('Unauthenticated', { status: 401 });
     }
+    if (sessionClaims.role !== UserRoles.ADMIN) {
+      return new NextResponse('Forbidden. Administrator rights are required.', {
+        status: 403,
+      });
+    }
+
     if (!label) {
       return new NextResponse('Label is required', { status: 400 });
     }
@@ -36,7 +43,6 @@ export async function POST(
       data: {
         label,
         imageUrl,
-        storeId: params.storeId,
       },
     });
 
@@ -55,11 +61,7 @@ export async function GET(
       return new NextResponse('Store ID is required', { status: 400 });
     }
 
-    const bodyTypes = await prismadb.bodyType.findMany({
-      where: {
-        storeId: params.storeId,
-      },
-    });
+    const bodyTypes = await prismadb.bodyType.findMany();
 
     return NextResponse.json(bodyTypes);
   } catch (error) {

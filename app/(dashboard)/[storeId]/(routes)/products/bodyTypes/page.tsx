@@ -5,7 +5,6 @@ import { format } from 'date-fns';
 
 const BodyTypesPage = async ({ params }: { params: { storeId: string } }) => {
   const bodyTypes = await prismadb.bodyType.findMany({
-    where: { storeId: params.storeId },
     orderBy: { createdAt: 'desc' },
   });
 

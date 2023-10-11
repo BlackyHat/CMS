@@ -33,13 +33,17 @@ const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/${params.storeId}/regions/cities/${data.id}`);
+      await axios.delete(`/api/${params.storeId}/cities/${data.id}`);
       router.refresh();
       toast.success('City deleted.');
     } catch (error) {
-      toast.error(
-        'Make sure you removed all products and regions using this city first.'
-      );
+      const errorMessage =
+        'Make sure you removed all products and regions using this city first.';
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.statusText || errorMessage);
+      } else {
+        toast.error(errorMessage);
+      }
     } finally {
       setLoading(false);
       setOpen(false);

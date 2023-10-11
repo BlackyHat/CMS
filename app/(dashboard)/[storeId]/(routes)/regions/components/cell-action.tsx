@@ -37,9 +37,13 @@ const CellAction: React.FC<CellActionProps> = ({ data }) => {
       router.refresh();
       toast.success('Region deleted.');
     } catch (error) {
-      toast.error(
-        'Make sure you removed all products using this region first.'
-      );
+      const errorMessage =
+        'Make sure you removed all products using this region first.';
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.statusText || errorMessage);
+      } else {
+        toast.error(errorMessage);
+      }
     } finally {
       setLoading(false);
       setOpen(false);

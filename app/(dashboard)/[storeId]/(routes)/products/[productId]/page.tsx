@@ -21,15 +21,9 @@ const ProductsPage = async ({
     },
   });
   const bodyTypes = await prismadb.bodyType.findMany({
-    where: {
-      storeId: params.storeId,
-    },
     orderBy: { label: 'desc' },
   });
   const makes = await prismadb.make.findMany({
-    where: {
-      storeId: params.storeId,
-    },
     include: { models: { orderBy: { label: 'asc' } } },
     orderBy: { label: 'asc' },
   });

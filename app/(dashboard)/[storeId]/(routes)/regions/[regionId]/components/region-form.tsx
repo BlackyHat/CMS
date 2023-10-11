@@ -41,7 +41,9 @@ const RegionForm: React.FC<RegionFormProps> = ({ initialData }) => {
   const [loading, setLoading] = useState(false);
 
   const title = initialData ? 'Edit region' : 'Create region';
-  const description = initialData ? 'Edit a region' : 'Add a new region';
+  const description = (
+    initialData ? 'Edit a region' : 'Add a new region'
+  ).concat(' *Only for users with admin rights.');
   const toastMessage = initialData ? 'Region updated.' : 'Region created.';
   const action = initialData ? 'Save changes' : 'Create';
 
@@ -65,7 +67,12 @@ const RegionForm: React.FC<RegionFormProps> = ({ initialData }) => {
       router.push(`/${params.storeId}/regions`);
       toast.success(toastMessage);
     } catch (error) {
-      toast.error('Something went wrong.');
+      const errorMessage = 'Something went wrong.';
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.statusText || errorMessage);
+      } else {
+        toast.error(errorMessage);
+      }
     } finally {
       setLoading(false);
     }
@@ -81,9 +88,13 @@ const RegionForm: React.FC<RegionFormProps> = ({ initialData }) => {
       router.push(`/${params.storeId}/regions`);
       toast.success('Region deleted.');
     } catch (error) {
-      toast.error(
-        'Make sure you removed all products using this region first.'
-      );
+      const errorMessage =
+        'Make sure you removed all products using this region first.';
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.statusText || errorMessage);
+      } else {
+        toast.error(errorMessage);
+      }
     } finally {
       setLoading(false);
       setOpen(false);
@@ -99,7 +110,11 @@ const RegionForm: React.FC<RegionFormProps> = ({ initialData }) => {
         loading={loading}
       />
       <div className="flex items-center justify-between">
-        <Heading title={title} description={description} />
+        <Heading
+          title={title}
+          description={description}
+          descClassName="text-red-600"
+        />
         {initialData && (
           <Button
             disabled={loading}

@@ -43,7 +43,9 @@ const BodyTypeForm: React.FC<BodyTypeFormProps> = ({ initialData }) => {
   const [loading, setLoading] = useState(false);
 
   const title = initialData ? 'Edit body type' : 'Create body type';
-  const description = initialData ? 'Edit a body type' : 'Add a body type';
+  const description = (
+    initialData ? 'Edit a body type' : 'Add a body type'
+  ).concat(' *Only for users with admin rights.');
   const toastMessage = initialData
     ? 'Body type updated.'
     : 'body type created.';
@@ -69,7 +71,12 @@ const BodyTypeForm: React.FC<BodyTypeFormProps> = ({ initialData }) => {
       router.push(`/${params.storeId}/products/bodyTypes`);
       toast.success(toastMessage);
     } catch (error) {
-      toast.error('Something went wrong.');
+      const errorMessage = 'Something went wrong.';
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.statusText || errorMessage);
+      } else {
+        toast.error(errorMessage);
+      }
     } finally {
       setLoading(false);
     }
@@ -85,9 +92,13 @@ const BodyTypeForm: React.FC<BodyTypeFormProps> = ({ initialData }) => {
       router.push(`/${params.storeId}/products/bodyTypes`);
       toast.success('Body type deleted.');
     } catch (error) {
-      toast.error(
-        'Make sure  you removed all products using this Body type first.'
-      );
+      const errorMessage =
+        'Make sure  you removed all products using this body type first.';
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.statusText || errorMessage);
+      } else {
+        toast.error(errorMessage);
+      }
     } finally {
       setLoading(false);
       setOpen(false);
@@ -103,7 +114,11 @@ const BodyTypeForm: React.FC<BodyTypeFormProps> = ({ initialData }) => {
         loading={loading}
       />
       <div className="flex items-center justify-between">
-        <Heading title={title} description={description} />
+        <Heading
+          title={title}
+          description={description}
+          descClassName="text-red-600"
+        />
         {initialData && (
           <Button
             disabled={loading}

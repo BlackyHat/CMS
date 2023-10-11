@@ -37,7 +37,13 @@ const CellAction: React.FC<CellActionProps> = ({ data }) => {
       router.refresh();
       toast.success('Model deleted.');
     } catch (error) {
-      toast.error('Make sure  you removed all makes using this model first.');
+      const errorMessage =
+        'Make sure  you removed all makes using this model first.';
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.statusText || errorMessage);
+      } else {
+        toast.error(errorMessage);
+      }
     } finally {
       setLoading(false);
       setOpen(false);

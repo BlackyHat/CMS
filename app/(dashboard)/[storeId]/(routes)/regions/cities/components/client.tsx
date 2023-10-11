@@ -25,7 +25,7 @@ const CitiesClient: React.FC<CitiesClientProps> = ({ data }) => {
           description="Manage cities for your store"
         />
         <Button
-          onClick={() => router.push(`/${params.storeId}/regions//cities/new`)}
+          onClick={() => router.push(`/${params.storeId}/regions/cities/new`)}
         >
           <Plus className="mr-2 h-4 w-4" />
           Add new

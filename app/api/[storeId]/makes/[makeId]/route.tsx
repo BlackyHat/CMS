@@ -1,4 +1,5 @@
 import prismadb from '@/lib/prismadb';
+import { UserRoles } from '@/types/enums';
 import { auth } from '@clerk/nextjs';
 import { NextResponse } from 'next/server';
 
@@ -28,7 +29,7 @@ export async function PATCH(
   { params }: { params: { storeId: string; makeId: string } }
 ) {
   try {
-    const { userId } = auth();
+    const { userId, sessionClaims } = auth();
     const body = await req.json();
 
     const { label } = body;
@@ -36,6 +37,12 @@ export async function PATCH(
     if (!userId) {
       return new NextResponse('Unauthenticated', { status: 401 });
     }
+    if (sessionClaims.role !== UserRoles.ADMIN) {
+      return new NextResponse('Forbidden. Administrator rights are required.', {
+        status: 403,
+      });
+    }
+
     if (!label) {
       return new NextResponse('Label is required', { status: 400 });
     }
@@ -71,11 +78,17 @@ export async function DELETE(
   { params }: { params: { storeId: string; makeId: string } }
 ) {
   try {
-    const { userId } = auth();
+    const { userId, sessionClaims } = auth();
 
     if (!userId) {
       return new NextResponse('Unauthenticated', { status: 401 });
     }
+    if (sessionClaims.role !== UserRoles.ADMIN) {
+      return new NextResponse('Forbidden. Administrator rights are required.', {
+        status: 403,
+      });
+    }
+
     if (!params.makeId) {
       return new NextResponse('Make id is required', { status: 400 });
     }

@@ -17,7 +17,9 @@ export async function PATCH(
       return new NextResponse('Unauthenticated', { status: 401 });
     }
     if (sessionClaims.role !== UserRoles.ADMIN) {
-      return new NextResponse('Forbidden', { status: 403 });
+      return new NextResponse('Forbidden. Administrator rights are required.', {
+        status: 403,
+      });
     }
 
     if (!name) {
@@ -51,7 +53,9 @@ export async function DELETE(
       return new NextResponse('Unauthenticated', { status: 401 });
     }
     if (sessionClaims.role !== UserRoles.ADMIN) {
-      return new NextResponse('Forbidden', { status: 403 });
+      return new NextResponse('Forbidden. Administrator rights are required.', {
+        status: 403,
+      });
     }
     if (!params.storeId) {
       return new NextResponse('Store is required', { status: 400 });

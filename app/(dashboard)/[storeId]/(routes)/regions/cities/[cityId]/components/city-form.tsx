@@ -59,7 +59,9 @@ const CityForm: React.FC<CityFormProps> = ({ initialData, regions }) => {
   const [loading, setLoading] = useState(false);
 
   const title = initialData ? 'Edit city' : 'Create city';
-  const description = initialData ? 'Edit a city' : 'Add a city';
+  const description = (initialData ? 'Edit a city' : 'Add a city').concat(
+    ' *Only for users with admin rights.'
+  );
   const toastMessage = initialData ? 'City updated.' : 'City created.';
   const action = initialData ? 'Save changes' : 'Create';
 
@@ -83,7 +85,12 @@ const CityForm: React.FC<CityFormProps> = ({ initialData, regions }) => {
       router.push(`/${params.storeId}/regions/cities`);
       toast.success(toastMessage);
     } catch (error) {
-      toast.error('Something went wrong.');
+      const errorMessage = 'Something went wrong.';
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.statusText || errorMessage);
+      } else {
+        toast.error(errorMessage);
+      }
     } finally {
       setLoading(false);
     }
@@ -99,7 +106,13 @@ const CityForm: React.FC<CityFormProps> = ({ initialData, regions }) => {
       router.push(`/${params.storeId}/regions/cities`);
       toast.success('City deleted.');
     } catch (error) {
-      toast.error('Make sure you removed all products using this city first.');
+      const errorMessage =
+        'Make sure you removed all products using this city first.';
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.statusText || errorMessage);
+      } else {
+        toast.error(errorMessage);
+      }
     } finally {
       setLoading(false);
       setOpen(false);
@@ -115,7 +128,11 @@ const CityForm: React.FC<CityFormProps> = ({ initialData, regions }) => {
         loading={loading}
       />
       <div className="flex items-center justify-between">
-        <Heading title={title} description={description} />
+        <Heading
+          title={title}
+          description={description}
+          descClassName="text-red-600"
+        />
         {initialData && (
           <Button
             disabled={loading}

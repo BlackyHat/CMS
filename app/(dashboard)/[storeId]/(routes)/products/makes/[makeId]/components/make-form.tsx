@@ -40,9 +40,11 @@ const MakeForm: React.FC<MakeFormProps> = ({ initialData }) => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const title = initialData ? 'Edit makes' : 'Create makes';
-  const description = initialData ? 'Edit a makes' : 'Add a makes';
-  const toastMessage = initialData ? 'Makes updated.' : 'Makes created.';
+  const title = initialData ? 'Edit make' : 'Create make';
+  const description = (initialData ? 'Edit a make.' : 'Add a make.').concat(
+    ' *Only for users with admin rights.'
+  );
+  const toastMessage = initialData ? 'Make updated.' : 'Make created.';
   const action = initialData ? 'Save changes' : 'Create';
 
   const form = useForm<MakeFormValues>({
@@ -65,7 +67,12 @@ const MakeForm: React.FC<MakeFormProps> = ({ initialData }) => {
       router.push(`/${params.storeId}/products/makes`);
       toast.success(toastMessage);
     } catch (error) {
-      toast.error('Something went wrong.');
+      const errorMessage = 'Something went wrong.';
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.statusText || errorMessage);
+      } else {
+        toast.error(errorMessage);
+      }
     } finally {
       setLoading(false);
     }
@@ -81,7 +88,13 @@ const MakeForm: React.FC<MakeFormProps> = ({ initialData }) => {
       router.push(`/${params.storeId}/products/makes`);
       toast.success('Make deleted.');
     } catch (error) {
-      toast.error('Make sure you removed all products using this Make first.');
+      const errorMessage =
+        'Make sure you removed all products using this make first.';
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.statusText || errorMessage);
+      } else {
+        toast.error(errorMessage);
+      }
     } finally {
       setLoading(false);
       setOpen(false);
@@ -97,7 +110,11 @@ const MakeForm: React.FC<MakeFormProps> = ({ initialData }) => {
         loading={loading}
       />
       <div className="flex items-center justify-between">
-        <Heading title={title} description={description} />
+        <Heading
+          title={title}
+          description={description}
+          descClassName="text-red-600"
+        />
         {initialData && (
           <Button
             disabled={loading}

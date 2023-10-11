@@ -38,9 +38,13 @@ const CellAction: React.FC<CellActionProps> = ({ data }) => {
       router.refresh();
       toast.success('Body Type deleted.');
     } catch (error) {
-      toast.error(
-        'Make sure  you removed all products using this Body Types first.'
-      );
+      const errorMessage =
+        'Make sure  you removed all products using this body types first.';
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.statusText || errorMessage);
+      } else {
+        toast.error(errorMessage);
+      }
     } finally {
       setLoading(false);
       setOpen(false);

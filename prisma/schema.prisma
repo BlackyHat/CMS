@@ -17,8 +17,6 @@ model Store {
   userId String  @db.Char(36)
   billboards Billboard[] @relation("StoreToBillboard")
   categories Category[] @relation("StoreToCategory")
-  bodyTypes BodyType[] @relation("StoreToBodyType")
-  makes Make[] @relation("StoreToMake")
   colors Color[] @relation("StoreToColor")
   products Product[] @relation("StoreToProduct")
   createdAt DateTime @default(now())
@@ -59,28 +57,22 @@ model Category {
 
 model BodyType {
   id String @id @default(uuid()) @db.Char(36)
-  storeId String @db.Char(36)
-  store Store @relation("StoreToBodyType", fields: [storeId], references: [id])
   products Product[] @relation("BodyTypeToProduct")
   label String @unique @db.VarChar(16)
   imageUrl String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([storeId])
   @@index([label])
 }
 model Make {
   id String @id @default(uuid()) @db.Char(36)
-  storeId String @db.Char(36)
-  store Store @relation("StoreToMake", fields: [storeId], references: [id], onDelete: Cascade)
   label String @unique @db.VarChar(36)
   models Model[] @relation("MakeToModel")
   products Product[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([storeId])
   @@index([label])
 }
 

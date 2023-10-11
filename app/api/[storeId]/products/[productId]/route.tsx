@@ -88,7 +88,9 @@ export async function PATCH(
       return new NextResponse('Unauthenticated', { status: 401 });
     }
     if (userId !== ownerId && sessionClaims.role !== UserRoles.ADMIN) {
-      return new NextResponse('Forbidden', { status: 403 });
+      return new NextResponse('Forbidden. Administrator rights are required.', {
+        status: 403,
+      });
     }
 
     const requiredFields = [
@@ -210,7 +212,9 @@ export async function DELETE(
     });
 
     if (userId !== product?.ownerId && sessionClaims.role !== UserRoles.ADMIN) {
-      return new NextResponse('Forbidden', { status: 403 });
+      return new NextResponse('Forbidden. Administrator rights are required.', {
+        status: 403,
+      });
     }
     await prismadb.product.delete({
       where: { id: params.productId },
