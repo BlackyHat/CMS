@@ -147,6 +147,8 @@ body,
 .cl-internal,
 .cl-card.cl-card > :last-child {
   opacity: 0;
+  width: 0;
+  height: 0;
 }
 
 .cl-profileSectionTitle {
