@@ -42,7 +42,7 @@ import * as z from 'zod';
 type ProductFormValues = z.infer<typeof formSchema>;
 
 interface ProductFormProps {
-  initialData: (Product & { images: Image[] }) | null;
+  initialData: (Product & { images: Pick<Image, 'url'>[] }) | null;
   categories: Category[];
   bodyTypes: BodyType[];
   makes: (Make & { models: Model[] })[];
@@ -60,7 +60,6 @@ const ProductForm: React.FC<ProductFormProps> = ({
 }) => {
   const params = useParams();
   const router = useRouter();
-
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const methods = useForm<ProductFormValues>({

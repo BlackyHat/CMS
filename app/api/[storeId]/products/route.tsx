@@ -120,7 +120,12 @@ export async function POST(
         sportSeats,
         images: {
           createMany: {
-            data: [...images.map((image: { url: string }) => image)],
+            data: [
+              ...images.map((image: { url: string }, idx: number) => ({
+                url: image.url,
+                position: idx,
+              })),
+            ],
           },
         },
       },
@@ -165,7 +170,14 @@ export async function GET(
         isArchived: false,
       },
       include: {
-        images: true,
+        images: {
+          select: {
+            url: true,
+          },
+          orderBy: {
+            position: 'asc',
+          },
+        },
         category: true,
         color: true,
         bodyType: true,

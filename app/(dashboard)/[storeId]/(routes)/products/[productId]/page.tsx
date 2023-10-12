@@ -11,7 +11,14 @@ const ProductsPage = async ({
       id: params.productId,
     },
     include: {
-      images: true,
+      images: {
+        select: {
+          url: true,
+        },
+        orderBy: {
+          position: 'asc',
+        },
+      },
     },
   });
 

@@ -17,7 +17,14 @@ export async function GET(
         id: params.productId,
       },
       include: {
-        images: true,
+        images: {
+          select: {
+            url: true,
+          },
+          orderBy: {
+            position: 'asc',
+          },
+        },
         category: true,
         color: true,
         bodyType: true,
@@ -123,7 +130,6 @@ export async function PATCH(
     if (!storeByUserId) {
       return new NextResponse('Unauthorized', { status: 403 });
     }
-
     await prismadb.product.update({
       where: {
         id: params.productId,
@@ -177,7 +183,12 @@ export async function PATCH(
       data: {
         images: {
           createMany: {
-            data: [...images.map((image: { url: string }) => image)],
+            data: [
+              ...images.map((image: { url: string }, idx: number) => ({
+                url: image.url,
+                position: idx,
+              })),
+            ],
           },
         },
       },

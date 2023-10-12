@@ -9,8 +9,8 @@ import { Inter } from 'next/font/google';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Admin Dashboard',
-  description: 'Admin Dashboard',
+  title: 'Admin Dashboard Car Store CMS',
+  description: 'Admin Dashboard Car Store Content Management System',
 };
 
 export default function RootLayout({
