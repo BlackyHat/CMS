@@ -2,7 +2,7 @@
 
 #### Demo 🖥️ 🚀 📅 🏦
 
-### [GO TO LIVE DEMO PAGE HERE ](https://dashboard-rho-ten.vercel.app) 👀 🌀 📙
+### [GO TO LIVE DEMO PAGE HERE ](https://dashboard-carshub.vercel.app/) 👀 🌀 📙
 
 Dashboard is a web application that allows users to create and organize store of products. App features a user-friendly login and registration setup, powered by the Clerk library. The UI is beautifully designed with a blend of Tailwind and ShadcnUI for a seamless look. Users can explore the Store, browse Categories, check out Billboards, and dive into a range of Products. We offer diverse Color and Size options, and smooth Orders placement. Notably, the app integrates secure payments through the Strapi library, ensuring a trustworthy transaction experience.
 
