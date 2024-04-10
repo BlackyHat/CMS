@@ -1,10 +1,10 @@
-import ProductForm from './components/product-form';
-import prismadb from '@/lib/prismadb';
+import ProductForm from './components/product-form'
+import prismadb from '@/lib/prismadb'
 
 const ProductsPage = async ({
   params,
 }: {
-  params: { productId: string; storeId: string };
+  params: { productId: string; storeId: string }
 }) => {
   const product = await prismadb.product.findUnique({
     where: {
@@ -20,32 +20,34 @@ const ProductsPage = async ({
         },
       },
     },
-  });
+  })
 
   const categories = await prismadb.category.findMany({
     where: {
       storeId: params.storeId,
     },
-  });
+  })
   const bodyTypes = await prismadb.bodyType.findMany({
     orderBy: { label: 'desc' },
-  });
+  })
+
   const makes = await prismadb.make.findMany({
     include: { models: { orderBy: { label: 'asc' } } },
     orderBy: { label: 'asc' },
-  });
+  })
+
   const colors = await prismadb.color.findMany({
     where: {
       storeId: params.storeId,
     },
     orderBy: { name: 'asc' },
-  });
+  })
   const regions = await prismadb.region.findMany({
     include: { cities: { orderBy: { name: 'asc' } } },
     orderBy: {
       updatedAt: 'asc',
     },
-  });
+  })
 
   return (
     <div className="max-w-screen-2xl m-auto">
@@ -60,7 +62,7 @@ const ProductsPage = async ({
         />
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ProductsPage;
+export default ProductsPage

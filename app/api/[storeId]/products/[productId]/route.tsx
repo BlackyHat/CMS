@@ -1,8 +1,8 @@
-import prismadb from '@/lib/prismadb';
-import { UserRoles } from '@/types/enums';
-import { validateFields } from '@/utils/validateUtils';
-import { auth } from '@clerk/nextjs';
-import { NextResponse } from 'next/server';
+import prismadb from '@/lib/prismadb'
+import { UserRoles } from '@/types/enums'
+import { validateFields } from '@/utils/validateUtils'
+import { clerkClient } from '@clerk/nextjs'
+import { NextResponse } from 'next/server'
 
 export async function GET(
   req: Request,
@@ -10,7 +10,7 @@ export async function GET(
 ) {
   try {
     if (!params.productId) {
-      return new NextResponse('Product id is required', { status: 400 });
+      return new NextResponse('Product id is required', { status: 400 })
     }
     const product = await prismadb.product.findUnique({
       where: {
@@ -33,12 +33,11 @@ export async function GET(
         region: true,
         city: true,
       },
-    });
+    })
 
-    return NextResponse.json(product);
+    return NextResponse.json(product)
   } catch (error) {
-    console.log('[PRODUCT_GET]', error);
-    return new NextResponse('Internal error', { status: 500 });
+    return new NextResponse('Internal error', { status: 500 })
   }
 }
 
@@ -47,8 +46,7 @@ export async function PATCH(
   { params }: { params: { storeId: string; productId: string } }
 ) {
   try {
-    const { userId, sessionClaims } = auth();
-    const body = await req.json();
+    const body = await req.json()
 
     const {
       ownerId,
@@ -89,16 +87,7 @@ export async function PATCH(
       seatHeating,
       soundSystem,
       sportSeats,
-    } = body;
-
-    if (!userId) {
-      return new NextResponse('Unauthenticated', { status: 401 });
-    }
-    if (userId !== ownerId && sessionClaims.role !== UserRoles.ADMIN) {
-      return new NextResponse('Forbidden. Administrator rights are required.', {
-        status: 403,
-      });
-    }
+    } = body
 
     const requiredFields = [
       { value: params.storeId, fieldName: 'Store ID' },
@@ -119,16 +108,32 @@ export async function PATCH(
       { value: images, fieldName: 'Images' },
       { value: regionId, fieldName: 'Region' },
       { value: cityId, fieldName: 'City' },
-    ];
+      { value: ownerId, fieldName: 'Owner id' },
+    ]
 
-    validateFields(requiredFields);
+    validateFields(requiredFields)
+
+    const user = await clerkClient.users.getUser(ownerId)
+
+    if (!user.id) {
+      return new NextResponse('Unauthenticated', { status: 401 })
+    }
+
+    if (
+      user.id !== ownerId &&
+      user.privateMetadata.userRole !== UserRoles.ADMIN
+    ) {
+      return new NextResponse('Forbidden. Administrator rights are required.', {
+        status: 403,
+      })
+    }
 
     const storeByUserId = await prismadb.store.findFirst({
-      where: { id: params.storeId, userId },
-    });
+      where: { id: params.storeId, userId: user.id },
+    })
 
     if (!storeByUserId) {
-      return new NextResponse('Unauthorized', { status: 403 });
+      return new NextResponse('Unauthorized', { status: 403 })
     }
     await prismadb.product.update({
       where: {
@@ -175,7 +180,7 @@ export async function PATCH(
           deleteMany: {},
         },
       },
-    });
+    })
     const product = await prismadb.product.update({
       where: {
         id: params.productId,
@@ -192,12 +197,11 @@ export async function PATCH(
           },
         },
       },
-    });
+    })
 
-    return NextResponse.json(product);
+    return NextResponse.json(product)
   } catch (error) {
-    console.log('[PRODUCT_PATCH]', error);
-    return new NextResponse('Internal error', { status: 500 });
+    return new NextResponse('Internal error', { status: 500 })
   }
 }
 
@@ -206,34 +210,38 @@ export async function DELETE(
   { params }: { params: { storeId: string; productId: string } }
 ) {
   try {
-    const { userId, sessionClaims } = auth();
+    const body = await req.json()
+    const user = await clerkClient.users.getUser(body.ownerId)
 
-    if (!userId) {
-      return new NextResponse('Unauthenticated', { status: 401 });
+    if (!user.id) {
+      return new NextResponse('Unauthenticated', { status: 401 })
+    }
+
+    if (
+      user.id !== body.ownerId &&
+      user.privateMetadata.userRole !== UserRoles.ADMIN
+    ) {
+      return new NextResponse('Forbidden. Administrator rights are required.', {
+        status: 403,
+      })
     }
 
     if (!params.productId) {
-      return new NextResponse('Product id is required', { status: 400 });
+      return new NextResponse('Product id is required', { status: 400 })
     }
 
     const product = await prismadb.product.findUnique({
       where: {
         id: params.productId,
       },
-    });
+    })
 
-    if (userId !== product?.ownerId && sessionClaims.role !== UserRoles.ADMIN) {
-      return new NextResponse('Forbidden. Administrator rights are required.', {
-        status: 403,
-      });
-    }
     await prismadb.product.delete({
       where: { id: params.productId },
-    });
+    })
 
-    return NextResponse.json(product);
+    return NextResponse.json(product)
   } catch (error) {
-    console.log('[PRODUCT_DELETE]', error);
-    return new NextResponse('Internal error', { status: 500 });
+    return new NextResponse('Internal error', { status: 500 })
   }
 }
